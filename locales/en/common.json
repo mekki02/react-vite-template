@@ -1,0 +1,34 @@
+{
+    "common": {
+        "logoAlt": "InventoryPro Logo",
+        "getStarted": "Get Started",
+        "contactUs": "Contact Us",
+        "usernameOrEmailLabel": "Username or Email",
+        "passwordLabel": "Password",
+        "orDivider": "OR"
+    },
+    "pages": {
+        "login": {
+            "loginTitle": "Login",
+            "loginSubtitle": "Access your account using your credentials or Single Sign-On (SSO).",
+            "ssoButton": "Continue with SSO",
+            "loginButton": "Login",
+            "registerPrompt": "Don't have an account? Register here"
+        },
+        "register": {
+            "registerTitle": "Register",
+            "registerSubtitle": "Create a new account using your credentials or Single Sign-On (SSO).",
+            "registerButton": "Register"
+        },
+        "page": {
+            "welcomeTitle": "Welcome to InventoryPro",
+            "welcomeSubtitle": "Your trusted partner in inventory management solutions.",
+            "feature1Title": "Streamlined Operations",
+            "feature1Description": "Optimize your inventory processes with our advanced tools and analytics.",
+            "feature2Title": "Real-Time Insights",
+            "feature2Description": "Make informed decisions with up-to-date inventory data at your fingertips.",
+            "feature3Title": "Scalable Solutions",
+            "feature3Description": "Whether you're a small business or a large enterprise, we've got you covered."
+        }
+    }
+}
