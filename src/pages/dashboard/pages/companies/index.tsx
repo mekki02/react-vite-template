@@ -139,13 +139,6 @@ export const CompaniesList: FC = () => {
         navigate('/dashboard/companies/new');
     }, [navigate]);
 
-    const handleRowEdit = useCallback(
-        (company: Company) => () => {
-            navigate(`/dashboard/companies/${company.id}/edit`);
-        },
-        [navigate],
-    );
-
     const handleRowDelete = useCallback(
         (company: Company) => async () => {
             const confirmed = await dialogs.confirm(
