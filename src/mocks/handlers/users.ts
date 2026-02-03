@@ -24,19 +24,19 @@ export const userHandlers = [
         const id = url.pathname.split("/").pop();
         const user = {
             id,
-            first_name: 'User firstname',
-            last_name: 'User lastname',
+            firstName: 'User firstname',
+            lastName: 'User lastname',
             username: `username 1`,
             email: `useremail+1@gmail`,
             role: 'Admin',
-            is_active: true,
+            isActive: true,
             locale: 'en',
-            organization_id: crypto.randomUUID(),
+            organizationId: crypto.randomUUID(),
             gender: 'M',
-            date_of_birth: new Date().toString(),
-            phone_number: "123123123",
-            avatar_url: 'URL',
-            profile_completed: true
+            dateOfBirth: new Date().toString(),
+            phoneNumber: "123123123",
+            avatarUrl: 'URL',
+            profileCompleted: true
         }
         return HttpResponse.json(user);
     }),

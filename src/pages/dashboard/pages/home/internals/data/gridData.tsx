@@ -2,6 +2,7 @@ import Avatar from '@mui/material/Avatar';
 import Chip from '@mui/material/Chip';
 import type { GridCellParams, GridRowsProp, GridColDef } from '@mui/x-data-grid';
 import { SparkLineChart } from '@mui/x-charts/SparkLineChart';
+import { useTranslation } from 'react-i18next';
 
 type SparkLineData = number[];
 
@@ -77,55 +78,59 @@ export function renderAvatar(
   );
 }
 
-export const columns: GridColDef[] = [
-  { field: 'pageTitle', headerName: 'Page Title', flex: 1.5, minWidth: 200 },
-  {
-    field: 'status',
-    headerName: 'Status',
-    flex: 0.5,
-    minWidth: 80,
-    renderCell: (params) => renderStatus(params.value as any),
-  },
-  {
-    field: 'users',
-    headerName: 'Users',
-    headerAlign: 'right',
-    align: 'right',
-    flex: 1,
-    minWidth: 80,
-  },
-  {
-    field: 'eventCount',
-    headerName: 'Event Count',
-    headerAlign: 'right',
-    align: 'right',
-    flex: 1,
-    minWidth: 100,
-  },
-  {
-    field: 'viewsPerUser',
-    headerName: 'Views per User',
-    headerAlign: 'right',
-    align: 'right',
-    flex: 1,
-    minWidth: 120,
-  },
-  {
-    field: 'averageTime',
-    headerName: 'Average Time',
-    headerAlign: 'right',
-    align: 'right',
-    flex: 1,
-    minWidth: 100,
-  },
-  {
-    field: 'conversions',
-    headerName: 'Daily Conversions',
-    flex: 1,
-    minWidth: 150,
-    renderCell: renderSparklineCell,
-  },
-];
+export const getColumns = (): GridColDef[] => {
+  const { t } = useTranslation();
+  
+  return [
+    { field: 'pageTitle', headerName: t('pages.dashboard.home.grid.pageTitle'), flex: 1.5, minWidth: 200 },
+    {
+      field: 'status',
+      headerName: t('pages.dashboard.home.grid.status'),
+      flex: 0.5,
+      minWidth: 80,
+      renderCell: (params) => renderStatus(params.value as any),
+    },
+    {
+      field: 'users',
+      headerName: t('pages.dashboard.home.grid.users'),
+      headerAlign: 'right',
+      align: 'right',
+      flex: 1,
+      minWidth: 80,
+    },
+    {
+      field: 'eventCount',
+      headerName: t('pages.dashboard.home.grid.eventCount'),
+      headerAlign: 'right',
+      align: 'right',
+      flex: 1,
+      minWidth: 100,
+    },
+    {
+      field: 'viewsPerUser',
+      headerName: t('pages.dashboard.home.grid.viewsPerUser'),
+      headerAlign: 'right',
+      align: 'right',
+      flex: 1,
+      minWidth: 120,
+    },
+    {
+      field: 'averageTime',
+      headerName: t('pages.dashboard.home.grid.averageTime'),
+      headerAlign: 'right',
+      align: 'right',
+      flex: 1,
+      minWidth: 100,
+    },
+    {
+      field: 'conversions',
+      headerName: t('pages.dashboard.home.grid.dailyConversions'),
+      flex: 1,
+      minWidth: 150,
+      renderCell: renderSparklineCell,
+    },
+  ];
+};
 
 export const rows: GridRowsProp = [
   {

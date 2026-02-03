@@ -7,11 +7,10 @@ import { Outlet } from 'react-router';
 import DashboardHeader from './components/topbar/DashboardHeader';
 import DashboardSidebar from './components/sidebar/DashboardSidebar';
 import DebbouLogo from '../../assets/debbou_logo.png';
-import NotificationsProvider from '../../contexts/notification-context';
 import { DialogsProvider } from '../../contexts/dialog-context';
-import { Provider as DashboardReduxProvider } from 'react-redux'
 import { DashboardProvider } from '../../contexts/dashboard-context';
-import { store } from './redux/store';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 export default function DashboardLayout() {
     const theme = useTheme();
@@ -52,9 +51,8 @@ export default function DashboardLayout() {
     const layoutRef = React.useRef<HTMLDivElement>(null);
 
     return (
-        <DashboardReduxProvider store={store}>
-            <DashboardProvider >
-                <NotificationsProvider>
+        <DashboardProvider>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DialogsProvider>
                         <Box
                             ref={layoutRef}
@@ -66,42 +64,41 @@ export default function DashboardLayout() {
                                 width: '100%',
                             }}
                         >
-                            <DashboardHeader
-                                logo={<img src={DebbouLogo} alt="Debbou Logo"  />}
-                                title=""
-                                menuOpen={isNavigationExpanded}
-                                onToggleMenu={handleToggleHeaderMenu}
-                            />
-                            <DashboardSidebar
-                                expanded={isNavigationExpanded}
-                                setExpanded={setIsNavigationExpanded}
-                                container={layoutRef?.current ?? undefined}
-                            />
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    flex: 1,
-                                    minWidth: 0,
-                                }}
-                            >
-                                <Toolbar sx={{ displayPrint: 'none' }} />
+                                <DashboardHeader
+                                    logo={<img src={DebbouLogo} alt="Debbou Logo" />}
+                                    title=""
+                                    menuOpen={isNavigationExpanded}
+                                    onToggleMenu={handleToggleHeaderMenu}
+                                />
+                                <DashboardSidebar
+                                    expanded={isNavigationExpanded}
+                                    setExpanded={setIsNavigationExpanded}
+                                    container={layoutRef?.current ?? undefined}
+                                />
                                 <Box
-                                    component="main"
                                     sx={{
                                         display: 'flex',
                                         flexDirection: 'column',
                                         flex: 1,
-                                        overflow: 'auto',
+                                        minWidth: 0,
                                     }}
                                 >
-                                    <Outlet />
+                                    <Toolbar sx={{ displayPrint: 'none' }} />
+                                    <Box
+                                        component="main"
+                                        sx={{
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            flex: 1,
+                                            overflow: 'auto',
+                                        }}
+                                    >
+                                        <Outlet />
+                                    </Box>
                                 </Box>
                             </Box>
-                        </Box>
-                    </DialogsProvider>
-                </NotificationsProvider>
+                        </DialogsProvider>
+                </LocalizationProvider>
             </DashboardProvider>
-        </DashboardReduxProvider>
     );
 }

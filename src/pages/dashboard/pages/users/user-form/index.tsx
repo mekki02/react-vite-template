@@ -78,7 +78,8 @@ export default function UserForm(props: UserFormProps) {
             </FormGroup>
             <Stack direction="row" spacing={2} justifyContent="space-between">
                 <Button
-                    variant="contained"
+                    variant="outlined"
+                    color="primary"
                     startIcon={<ArrowBackIcon />}
                     onClick={handleBack}
                 >
@@ -87,6 +88,7 @@ export default function UserForm(props: UserFormProps) {
                 <Button
                     type="submit"
                     variant="contained"
+                    color="primary"
                     size="large"
                     disabled={!isDirty || !isValid || isSubmitting}
                 >

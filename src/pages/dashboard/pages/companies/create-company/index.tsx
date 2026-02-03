@@ -48,7 +48,7 @@ export default function CompanyCreate() {
     return (
         <PageContainer
             title="New Company"
-            breadcrumbs={[{ title: 'Companies', path: '/companies' }, { title: 'New' }]}
+            breadcrumbs={[{ title: 'Companies', path: '/dashboard/companies' }, { title: 'New Company' }]}
         >
             <CompanyForm
                 defaultValues={defaultCompanyValues}

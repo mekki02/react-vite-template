@@ -24,6 +24,8 @@ export const UserUpdate: FC = (): JSX.Element => {
         skip: !userId,
     });
 
+    console.log(user)
+
     const [updateUser, { isLoading: isUpdating, isSuccess: isUpdateSuccess, isError: isUpdateError }] = useUpdateUserMutation();
     
     useEffect(() => {

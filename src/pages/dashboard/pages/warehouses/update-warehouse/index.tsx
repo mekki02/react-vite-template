@@ -104,7 +104,7 @@ export const WarehouseUpdate: FC = (): JSX.Element => {
             breadcrumbs={[
                 { title: 'Warehouses', path: '/dashboard/warehouses' },
                 { title: `Warehouse ${warehouse?.name || ''}`, path: `/dashboard/warehouses/${warehouseId}` },
-                { title: 'Edit' },
+                { title: 'Edit Warehouse' },
             ]}
         >
             <Box sx={{ display: 'flex', flex: 1 }}>{renderEdit}</Box>

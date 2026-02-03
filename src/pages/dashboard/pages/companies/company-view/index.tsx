@@ -1,222 +1,152 @@
-import * as React from 'react';
-import Alert from '@mui/material/Alert';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import CircularProgress from '@mui/material/CircularProgress';
-import Divider from '@mui/material/Divider';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { useNavigate, useParams } from 'react-router';
-import { useDialogs } from '../../../../../hooks/context/dialog';
-import useNotifications from '../../../../../hooks/context/notification';
-import { getErrorMessage } from '../../../../../utils/toolkit-query';
+import React from 'react';
+import { Box, Button, Card, CardContent, Stack, Typography, Alert } from '@mui/material';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useGetCompanyByIdQuery } from '../../../redux/slices/companies/companiesSlice';
 import PageContainer from '../../../shared/page-container';
-import type { FC, JSX } from 'react';
-import { useDeleteCompanyMutation, useGetCompanyByIdQuery } from '../../../redux/slices/companies/companiesSlice';
+import EditIcon from '@mui/icons-material/Edit';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-export const CompanyView: FC = (): JSX.Element => {
-    const { companyId } = useParams();
+const CompanyView: React.FC = () => {
     const navigate = useNavigate();
+    const { companyId } = useParams<{ companyId: string }>();
 
-    const dialogs = useDialogs();
-    const notifications = useNotifications();
-
-    const {
-        data: company,
-        isLoading,
-        error,
-    } = useGetCompanyByIdQuery(companyId!, {
+    const { data: company, isLoading, error } = useGetCompanyByIdQuery(companyId!, {
         skip: !companyId,
     });
-    const [deleteCompany, { isLoading: isDeleting}] = useDeleteCompanyMutation();
 
-    const handleCompanyEdit = React.useCallback(() => {
+    const handleEditCompany = () => {
         navigate(`/dashboard/companies/${companyId}/edit`);
-    }, [navigate, companyId]);
+    };
 
-    const handleCompanyDelete = React.useCallback(async () => {
-        if (!company) {
-            return;
-        }
-
-        const confirmed = await dialogs.confirm(
-            `Do you wish to delete ${company.legalName}?`,
-            {
-                title: `Delete company?`,
-                severity: 'error',
-                okText: 'Delete',
-                cancelText: 'Cancel',
-            },
-        );
-
-        if (confirmed) {
-            try {
-                await deleteCompany(companyId!);
-
-                navigate('/dashboard/companies');
-
-                notifications.show('Company deleted successfully.', {
-                    severity: 'success',
-                    autoHideDuration: 3000,
-                });
-            } catch (deleteError) {
-                notifications.show(
-                    `Failed to delete company. Reason:' ${(deleteError as Error).message}`,
-                    {
-                        severity: 'error',
-                        autoHideDuration: 3000,
-                    },
-                );
-            }
-        }
-    }, [company, dialogs, companyId, navigate, notifications]);
-
-    const handleBack = React.useCallback(() => {
+    const handleBack = () => {
         navigate('/dashboard/companies');
-    }, [navigate]);
+    };
 
-    const renderShow = React.useMemo(() => {
-        if (isLoading || isDeleting) {
-            return (
-                <Box
-                    sx={{
-                        flex: 1,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        width: '100%',
-                        m: 1,
-                    }}
-                >
-                    <CircularProgress />
-                </Box>
-            );
-        }
-        if (error) {
-            return (
+    if (isLoading) {
+        return (
+            <PageContainer title="Company Details">
                 <Box sx={{ flexGrow: 1 }}>
-                    <Alert severity="error">{getErrorMessage(error)}</Alert>
+                    <div>Loading company details...</div>
                 </Box>
-            );
-        }
+            </PageContainer>
+        );
+    }
 
-        return company ? (
-            <Box sx={{ flexGrow: 1, width: '100%' }}>
-                <Grid container spacing={2} sx={{ width: '100%' }}>
-                    <Grid size={{ xs: 12, sm: 6 }}>
-                        <Paper sx={{ px: 2, py: 1 }}>
-                            <Typography variant="overline">Name</Typography>
-                            <Typography variant="body1" sx={{ mb: 1 }}>
-                                {company.legalName}
-                            </Typography>
-                        </Paper>
-                    </Grid>
-                    <Grid size={{ xs: 12, sm: 6 }}>
-                        <Paper sx={{ px: 2, py: 1 }}>
-                            <Typography variant="overline">Code</Typography>
-                            <Typography variant="body1" sx={{ mb: 1 }}>
-                                {company.brandName}
-                            </Typography>
-                        </Paper>
-                    </Grid>
-                    <Grid size={{ xs: 12, sm: 6 }}>
-                        <Paper sx={{ px: 2, py: 1 }}>
-                            <Typography variant="overline">Active state</Typography>
-                            <Typography variant="body1" sx={{ mb: 1 }}>
-                                {company.registrationNumber}
-                            </Typography>
-                        </Paper>
-                    </Grid>
-                    <Grid size={{ xs: 12, sm: 6 }}>
-                        <Paper sx={{ px: 2, py: 1 }}>
-                            <Typography variant="overline">Name</Typography>
-                            <Typography variant="body1" sx={{ mb: 1 }}>
-                                {company.taxId}
-                            </Typography>
-                        </Paper>
-                    </Grid>
-                    <Grid size={{ xs: 12, sm: 6 }}>
-                        <Paper sx={{ px: 2, py: 1 }}>
-                            <Typography variant="overline">Code</Typography>
-                            <Typography variant="body1" sx={{ mb: 1 }}>
-                                {company.vatNumber}
-                            </Typography>
-                        </Paper>
-                    </Grid>
-                    <Grid size={{ xs: 12, sm: 6 }}>
-                        <Paper sx={{ px: 2, py: 1 }}>
-                            <Typography variant="overline">Active state</Typography>
-                            <Typography variant="body1" sx={{ mb: 1 }}>
-                                {company.currency}
-                            </Typography>
-                        </Paper>
-                    </Grid>
-                    <Grid size={{ xs: 12, sm: 6 }}>
-                        <Paper sx={{ px: 2, py: 1 }}>
-                            <Typography variant="overline">Active state</Typography>
-                            <Typography variant="body1" sx={{ mb: 1 }}>
-                                {company.timezone}
-                            </Typography>
-                        </Paper>
-                    </Grid>
-                </Grid>
-                <Divider sx={{ my: 3 }} />
-                <Stack direction="row" spacing={2} justifyContent="space-between">
+    if (error || !company) {
+        return (
+            <PageContainer title="Company Details">
+                <Box sx={{ flexGrow: 1 }}>
+                    <Alert severity="warning">Company not found</Alert>
+                </Box>
+            </PageContainer>
+        );
+    }
+
+    return (
+        <PageContainer
+            title="Company Details"
+            breadcrumbs={[
+                { title: 'Companies', path: '/dashboard/companies' },
+                { title: 'Company Details' },
+            ]}
+            actions={
+                <Stack direction="row" spacing={2}>
                     <Button
-                        variant="contained"
+                        variant="outlined"
                         startIcon={<ArrowBackIcon />}
                         onClick={handleBack}
                     >
                         Back
                     </Button>
-                    <Stack direction="row" spacing={2}>
-                        <Button
-                            variant="contained"
-                            startIcon={<EditIcon />}
-                            onClick={handleCompanyEdit}
-                        >
-                            Edit
-                        </Button>
-                        <Button
-                            variant="contained"
-                            color="error"
-                            startIcon={<DeleteIcon />}
-                            onClick={handleCompanyDelete}
-                        >
-                            Delete
-                        </Button>
-                    </Stack>
+                    <Button
+                        variant="contained"
+                        startIcon={<EditIcon />}
+                        onClick={handleEditCompany}
+                    >
+                        Edit Company
+                    </Button>
+                </Stack>
+            }
+        >
+            <Box sx={{ flexGrow: 1 }}>
+                <Stack spacing={3}>
+                    <Card>
+                        <CardContent>
+                            <Typography variant="h6" gutterBottom>
+                                Basic Information
+                            </Typography>
+                            <Stack spacing={2}>
+                                <Box>
+                                    <Typography variant="subtitle2" color="text.secondary">
+                                        Legal Name
+                                    </Typography>
+                                    <Typography variant="body1">
+                                        {company.legalName}
+                                    </Typography>
+                                </Box>
+                                <Box>
+                                    <Typography variant="subtitle2" color="text.secondary">
+                                        Brand Name
+                                    </Typography>
+                                    <Typography variant="body1">
+                                        {company.brandName}
+                                    </Typography>
+                                </Box>
+                                <Box>
+                                    <Typography variant="subtitle2" color="text.secondary">
+                                        Registration Number
+                                    </Typography>
+                                    <Typography variant="body1">
+                                        {company.registrationNumber}
+                                    </Typography>
+                                </Box>
+                                <Box>
+                                    <Typography variant="subtitle2" color="text.secondary">
+                                        Tax ID
+                                    </Typography>
+                                    <Typography variant="body1">
+                                        {company.taxId}
+                                    </Typography>
+                                </Box>
+                                <Box>
+                                    <Typography variant="subtitle2" color="text.secondary">
+                                        VAT Number
+                                    </Typography>
+                                    <Typography variant="body1">
+                                        {company.vatNumber}
+                                    </Typography>
+                                </Box>
+                                <Box>
+                                    <Typography variant="subtitle2" color="text.secondary">
+                                        Currency
+                                    </Typography>
+                                    <Typography variant="body1">
+                                        {company.currency}
+                                    </Typography>
+                                </Box>
+                                <Box>
+                                    <Typography variant="subtitle2" color="text.secondary">
+                                        Timezone
+                                    </Typography>
+                                    <Typography variant="body1">
+                                        {company.timezone}
+                                    </Typography>
+                                </Box>
+                                <Box>
+                                    <Typography variant="subtitle2" color="text.secondary">
+                                        Company ID
+                                    </Typography>
+                                    <Typography variant="body1" sx={{ fontFamily: 'monospace' }}>
+                                        {company.id}
+                                    </Typography>
+                                </Box>
+                            </Stack>
+                        </CardContent>
+                    </Card>
                 </Stack>
             </Box>
-        ) : null;
-    }, [
-        isLoading,
-        error,
-        company,
-        handleBack,
-        handleCompanyEdit,
-        handleCompanyDelete,
-    ]);
-
-    const pageTitle = `Company ${companyId}`;
-
-    return (
-        <PageContainer
-            title={pageTitle}
-            breadcrumbs={[
-                { title: 'Companies', path: '/dashboard/companies' },
-                { title: pageTitle },
-            ]}
-        >
-            <Box sx={{ display: 'flex', flex: 1, width: '100%' }}>{renderShow}</Box>
         </PageContainer>
     );
-}
+};
 
 export default CompanyView;

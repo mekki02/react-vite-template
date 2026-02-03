@@ -1,7 +1,9 @@
 import { DataGrid } from '@mui/x-data-grid';
-import { columns, rows } from '../internals/data/gridData';
+import { getColumns, rows } from '../internals/data/gridData';
 
 export default function CustomizedDataGrid() {
+
+  const columns = getColumns();
   return (
     <DataGrid
       checkboxSelection

@@ -1,10 +1,10 @@
 import { type FC, type PropsWithChildren, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuthStatus } from '../../hooks';
+import { useAuthWithNavigation } from '../../hooks/useAuthWithNavigation';
 
 const AuthGuard: FC<PropsWithChildren> = ({ children }) => {
 
-  const { isAuthenticated, isLoading } = useAuthStatus();
+  const { isAuthenticated, isLoading } = useAuthWithNavigation();
   const navigate = useNavigate();
 
   useEffect(() => {

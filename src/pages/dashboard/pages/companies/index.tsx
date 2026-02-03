@@ -20,14 +20,15 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useLocation, useNavigate, } from 'react-router';
 import { useSearchParams } from 'react-router-dom';
-import { useDialogs } from '../../../../hooks/context/dialog';
-import useNotifications from '../../../../hooks/context/notification';
-import PageContainer from '../../shared/page-container';
+import { useDialogs } from '@hooks/context/dialog';
+import useNotifications from '@hooks/context/notification';
+import PageContainer from '@pages/dashboard/shared/page-container';
 import { useCallback, useMemo, useState, type FC } from 'react';
-import type { Company } from '../../types';
-import { getErrorMessage } from '../../../../utils/toolkit-query';
-import { useDeleteCompanyMutation, useGetCompaniesQuery } from '../../redux/slices/companies/companiesSlice';
-import { companyFormSchema } from '../../shared/schemas/company-schema';
+import type { Company } from '@pages/dashboard/types';
+import { getErrorMessage } from '@utils/toolkit-query';
+import { useDeleteCompanyMutation, useGetCompaniesQuery } from '@pages/dashboard/redux/slices/companies/companiesSlice';
+import { companyFormSchema } from '@pages/dashboard/shared/schemas/company-schema';
+import { useTranslation } from 'react-i18next';
 
 const INITIAL_PAGE_SIZE = 10;
 
@@ -35,6 +36,7 @@ export const CompaniesList: FC = () => {
     const { pathname } = useLocation();
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const dialogs = useDialogs();
     const notifications = useNotifications();
@@ -147,12 +149,12 @@ export const CompaniesList: FC = () => {
     const handleRowDelete = useCallback(
         (company: Company) => async () => {
             const confirmed = await dialogs.confirm(
-                `Do you wish to delete ${company.legalName}?`,
+                t('pages.dashboard.companies.messages.deleteConfirm', { name: company.legalName }),
                 {
-                    title: `Delete company?`,
+                    title: t('pages.dashboard.companies.messages.deleteTitle'),
                     severity: 'error',
-                    okText: 'Delete',
-                    cancelText: 'Cancel',
+                    okText: t('common.actions.delete'),
+                    cancelText: t('common.actions.cancel'),
                 },
             );
 
@@ -160,14 +162,14 @@ export const CompaniesList: FC = () => {
                 try {
                     await deleteCompany(company.id);
 
-                    notifications.show('Company deleted successfully.', {
+                    notifications.show(t('pages.dashboard.companies.messages.deleteSuccess'), {
                         severity: 'success',
                         autoHideDuration: 3000,
                     });
                     refetch();
                 } catch (deleteError) {
                     notifications.show(
-                        `Failed to delete company. Reason:' ${(deleteError as Error).message}`,
+                        t('pages.dashboard.companies.messages.deleteFailed', { error: (deleteError as Error).message }),
                         {
                             severity: 'error',
                             autoHideDuration: 3000,
@@ -176,7 +178,7 @@ export const CompaniesList: FC = () => {
                 }
             }
         },
-        [dialogs, notifications, deleteCompany, refetch],
+        [dialogs, notifications, deleteCompany, refetch, t],
     );
 
     const initialState = useMemo(
@@ -188,46 +190,49 @@ export const CompaniesList: FC = () => {
 
     const companyColumns = companyFormSchema.map(field => ({
         field: field.name,
-        headerName: field.label,
+        headerName: t(`pages.dashboard.companies.columns.${field.name}`),
     }));
 
     const columns = useMemo<GridColDef[]>(
         () => [
-            { field: 'id', headerName: 'ID' },
+            { field: 'id', headerName: t('pages.dashboard.companies.columns.id') },
             ...companyColumns,
             {
                 field: 'actions',
                 type: 'actions',
+                headerName: t('common.actions.actions'),
                 flex: 1,
-                align: 'right',
-                getActions: ({ row }) => [
+                minWidth: 120,
+                getActions: (params) => [
                     <GridActionsCellItem
-                        key="edit-item"
+                        key="view"
                         icon={<EditIcon />}
-                        label="Edit"
-                        onClick={handleRowEdit(row)}
+                        label={t('common.actions.edit')}
+                        onClick={() => navigate(`/dashboard/companies/${params.id}/edit`)}
                     />,
                     <GridActionsCellItem
-                        key="delete-item"
+                        key="delete"
                         icon={<DeleteIcon />}
-                        label="Delete"
-                        onClick={handleRowDelete(row)}
+                        label={t('common.actions.delete')}
+                        onClick={() => handleRowDelete(params.row as Company)}
                     />,
                 ],
             },
         ],
-        [handleRowEdit, handleRowDelete],
+        [navigate, handleRowDelete, t],
     );
 
-    const pageTitle = 'Companies';
+    const pageTitle = t('pages.dashboard.companies.title');
 
     return (
         <PageContainer
             title={pageTitle}
-            breadcrumbs={[{ title: pageTitle }]}
+            breadcrumbs={[
+                { title: pageTitle, path: '/dashboard/companies' },
+            ]}
             actions={
                 <Stack direction="row" alignItems="center" spacing={1}>
-                    <Tooltip title="Reload data" placement="right" enterDelay={1000}>
+                    <Tooltip title={t('common.actions.refresh')} placement="right" enterDelay={1000}>
                         <div>
                             <IconButton size="small" aria-label="refresh" onClick={handleRefresh}>
                                 <RefreshIcon />
@@ -239,7 +244,7 @@ export const CompaniesList: FC = () => {
                         onClick={handleCreateClick}
                         startIcon={<AddIcon />}
                     >
-                        Create Company
+                        {t('pages.dashboard.companies.addCompany')}
                     </Button>
                 </Stack>
             }

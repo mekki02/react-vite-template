@@ -6,20 +6,25 @@ import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import Toolbar from '@mui/material/Toolbar';
 import PersonIcon from '@mui/icons-material/Person';
-import DescriptionIcon from '@mui/icons-material/Description';
 import BusinessIcon from '@mui/icons-material/Business';
 import WarehouseIcon from '@mui/icons-material/Warehouse';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import InventoryIcon from '@mui/icons-material/Inventory';
+import PeopleIcon from '@mui/icons-material/People';
+import MailIcon from '@mui/icons-material/Mail';
+import CategoryIcon from '@mui/icons-material/Category';
+import LocalOfferIcon from '@mui/icons-material/LocalOffer';
+import StraightenIcon from '@mui/icons-material/Straighten';
 import { matchPath, useLocation } from 'react-router';
 import DashboardSidebarPageItem from './DashboardSidebarPageItem';
 import {
   getDrawerSxTransitionMixin,
   getDrawerWidthTransitionMixin,
 } from './mixins';
-import { SidebarContext } from '../../../../contexts/sidebar-context';
+import { SidebarContext } from "@contexts/sidebar-context";
 import DashboardSidebarDividerItem from './DashboardSidebarDividerItem';
 import DashboardSidebarHeaderItem from './DashboardSidebarHeaderItem';
-import { DRAWER_WIDTH, MINI_DRAWER_WIDTH } from '../../../../constants/sidebar';
+import { DRAWER_WIDTH, MINI_DRAWER_WIDTH } from "@constants/sidebar";
 
 export interface DashboardSidebarProps {
   expanded?: boolean;
@@ -147,7 +152,7 @@ export default function DashboardSidebar({
               title="Users"
               icon={<PersonIcon />}
               href="/dashboard/users"
-              selected={!!matchPath('/dashboard/users', pathname) || !!matchPath('/dashboard/users/invitations', pathname) }
+              selected={!!matchPath('/dashboard/users/*', pathname)}
               defaultExpanded={!!(matchPath('/dashboard/users', pathname))}
               expanded={expandedItemIds.includes('users')}
               nestedNavigation={
@@ -163,14 +168,14 @@ export default function DashboardSidebar({
                   <DashboardSidebarPageItem
                     id="list"
                     title="List"
-                    icon={<DescriptionIcon />}
+                    icon={<PeopleIcon />}
                     href="/dashboard/users"
                     selected={!!matchPath('/dashboard/users', pathname)}
                   />
                   <DashboardSidebarPageItem
                     id="invitations"
                     title="Invitations"
-                    icon={<DescriptionIcon />}
+                    icon={<MailIcon />}
                     href="/dashboard/users/invitations"
                     selected={!!matchPath('/dashboard/users/invitations', pathname)}
                   />
@@ -190,6 +195,48 @@ export default function DashboardSidebar({
               icon={<WarehouseIcon />}
               href="/dashboard/warehouses"
               selected={!!matchPath('/dashboard/warehouses/*', pathname) || pathname === '/'}
+            />
+            <DashboardSidebarPageItem
+              id="products"
+              title="Products"
+              icon={<InventoryIcon />}
+              href="/dashboard/products"
+              selected={!!matchPath('/dashboard/products/*', pathname)}
+              defaultExpanded={!!(matchPath('/dashboard/products', pathname))}
+              expanded={expandedItemIds.includes('products')}
+              nestedNavigation={
+                <List
+                  dense
+                  sx={{
+                    padding: 0,
+                    my: 1,
+                    pl: mini ? 0 : 1,
+                    minWidth: 240,
+                  }}
+                >
+                  <DashboardSidebarPageItem
+                    id="products-list"
+                    title="Products"
+                    icon={<CategoryIcon />}
+                    href="/dashboard/products"
+                    selected={!!matchPath('/dashboard/products', pathname)}
+                  />
+                  <DashboardSidebarPageItem
+                    id="lots"
+                    title="Lots"
+                    icon={<LocalOfferIcon />}
+                    href="/dashboard/products/lots"
+                    selected={!!matchPath('/dashboard/products/lots/*', pathname)}
+                  />
+                  <DashboardSidebarPageItem
+                    id="uom"
+                    title="Units of Measure"
+                    icon={<StraightenIcon />}
+                    href="/dashboard/products/uom"
+                    selected={!!matchPath('/dashboard/products/uom/*', pathname)}
+                  />
+                </List>
+              }
             />
           </List>
         </Box>

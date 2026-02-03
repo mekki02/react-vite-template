@@ -52,7 +52,7 @@ export default function WarehouseCreate() {
     return (
         <PageContainer
             title="New Warehouse"
-            breadcrumbs={[{ title: 'Warehouses', path: '/warehouses' }, { title: 'New' }]}
+            breadcrumbs={[{ title: 'Warehouses', path: '/dashboard/warehouses' }, { title: 'New Warehouse' }]}
         >
             <WarehouseForm
                 defaultValues={defaultWarehouseValues}

@@ -28,6 +28,7 @@ import type { User } from '../../types';
 import { getErrorMessage } from '../../../../utils/toolkit-query';
 import { useDeleteUserMutation, useGetUsersQuery } from '../../redux/slices/users/userSlice';
 import { userFormSchema } from '../../shared/schemas/user-schema';
+import { useTranslation } from 'react-i18next';
 
 const INITIAL_PAGE_SIZE = 10;
 
@@ -35,6 +36,7 @@ export const UsersList: FC = () => {
     const { pathname } = useLocation();
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const dialogs = useDialogs();
     const notifications = useNotifications();
@@ -147,12 +149,12 @@ export const UsersList: FC = () => {
     const handleRowDelete = useCallback(
         (user: User) => async () => {
             const confirmed = await dialogs.confirm(
-                `Do you wish to delete ${user.firstName} ${user.lastName}?`,
+                t('common.messages.deleteConfirm', { item: `${user.firstName} ${user.lastName}` }),
                 {
-                    title: `Delete user?`,
+                    title: t('common.actions.delete') + ' user?',
                     severity: 'error',
-                    okText: 'Delete',
-                    cancelText: 'Cancel',
+                    okText: t('common.actions.delete'),
+                    cancelText: t('common.actions.cancel'),
                 },
             );
 
@@ -160,14 +162,15 @@ export const UsersList: FC = () => {
                 try {
                     await deleteUser(user.id);
 
-                    notifications.show('User deleted successfully.', {
+                    notifications.show(t('common.messages.deleteSuccess', { item: 'User' }), {
                         severity: 'success',
                         autoHideDuration: 3000,
                     });
                     refetch();
                 } catch (deleteError) {
+                    const errorMessage = `Failed to delete user. Reason: ${(deleteError as Error).message}`;
                     notifications.show(
-                        `Failed to delete user. Reason:' ${(deleteError as Error).message}`,
+                        t('common.messages.errorOccurred', { error: errorMessage }),
                         {
                             severity: 'error',
                             autoHideDuration: 3000,
@@ -176,7 +179,7 @@ export const UsersList: FC = () => {
                 }
             }
         },
-        [dialogs, notifications, deleteUser, refetch],
+        [dialogs, notifications, deleteUser, refetch, t],
     );
 
     const initialState = useMemo(
@@ -188,47 +191,50 @@ export const UsersList: FC = () => {
 
     const userColumns = userFormSchema.map(field => ({
         field: field.name,
-        headerName: field.label,
+        headerName: t(`pages.dashboard.users.columns.${field.name}`),
         valueOptions: field?.options?.map(({ value }: { value: string }) => value)
     }));
 
     const columns = useMemo<GridColDef[]>(
         () => [
-            { field: 'id', headerName: 'ID' },
+            { field: 'id', headerName: t('pages.dashboard.users.columns.id') },
             ...userColumns,
             {
                 field: 'actions',
                 type: 'actions',
+                headerName: t('common.actions.actions'),
                 flex: 1,
                 align: 'right',
                 getActions: ({ row }) => [
                     <GridActionsCellItem
                         key="edit-item"
                         icon={<EditIcon />}
-                        label="Edit"
+                        label={t('common.actions.edit')}
                         onClick={handleRowEdit(row)}
                     />,
                     <GridActionsCellItem
                         key="delete-item"
                         icon={<DeleteIcon />}
-                        label="Delete"
+                        label={t('common.actions.delete')}
                         onClick={handleRowDelete(row)}
                     />,
                 ],
             },
         ],
-        [handleRowEdit, handleRowDelete],
+        [handleRowEdit, handleRowDelete, t],
     );
 
-    const pageTitle = 'Users';
+    const pageTitle = t('pages.dashboard.users.title');
 
     return (
         <PageContainer
             title={pageTitle}
-            breadcrumbs={[{ title: pageTitle }]}
+            breadcrumbs={[
+                { title: pageTitle, path: '/dashboard/users' },
+            ]}
             actions={
                 <Stack direction="row" alignItems="center" spacing={1}>
-                    <Tooltip title="Reload data" placement="right" enterDelay={1000}>
+                    <Tooltip title={t('common.actions.refresh')} placement="right" enterDelay={1000}>
                         <div>
                             <IconButton size="small" aria-label="refresh" onClick={handleRefresh}>
                                 <RefreshIcon />
@@ -240,7 +246,7 @@ export const UsersList: FC = () => {
                         onClick={handleCreateClick}
                         startIcon={<AddIcon />}
                     >
-                        Send user invitation
+                        {t('pages.dashboard.users.addUser')}
                     </Button>
                 </Stack>
             }

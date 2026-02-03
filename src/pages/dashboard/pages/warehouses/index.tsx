@@ -27,6 +27,7 @@ import { useCallback, useMemo, useState, type FC } from 'react';
 import type { Warehouse } from '../../types';
 import { getErrorMessage } from '../../../../utils/toolkit-query';
 import { useDeleteWarehouseMutation, useGetWarehousesQuery } from '../../redux/slices/warehouses/warehousesSlice';
+import { useTranslation } from 'react-i18next';
 
 const INITIAL_PAGE_SIZE = 10;
 
@@ -34,6 +35,7 @@ export const WarehousesList: FC = () => {
     const { pathname } = useLocation();
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const dialogs = useDialogs();
     const notifications = useNotifications();
@@ -146,12 +148,12 @@ export const WarehousesList: FC = () => {
     const handleRowDelete = useCallback(
         (warehouse: Warehouse) => async () => {
             const confirmed = await dialogs.confirm(
-                `Do you wish to delete ${warehouse.name}?`,
+                t('common.messages.deleteConfirm', { item: warehouse.name }),
                 {
-                    title: `Delete warehouse?`,
+                    title: t('common.actions.delete') + ' warehouse?',
                     severity: 'error',
-                    okText: 'Delete',
-                    cancelText: 'Cancel',
+                    okText: t('common.actions.delete'),
+                    cancelText: t('common.actions.cancel'),
                 },
             );
 
@@ -159,14 +161,15 @@ export const WarehousesList: FC = () => {
                 try {
                     await deleteWarehouse(warehouse.id);
 
-                    notifications.show('Warehouse deleted successfully.', {
+                    notifications.show(t('common.messages.deleteSuccess', { item: 'Warehouse' }), {
                         severity: 'success',
                         autoHideDuration: 3000,
                     });
                     refetch();
                 } catch (deleteError) {
+                    const errorMessage = `Failed to delete warehouse. Reason: ${(deleteError as Error).message}`;
                     notifications.show(
-                        `Failed to delete warehouse. Reason:' ${(deleteError as Error).message}`,
+                        t('common.messages.errorOccurred', { error: errorMessage }),
                         {
                             severity: 'error',
                             autoHideDuration: 3000,
@@ -175,7 +178,7 @@ export const WarehousesList: FC = () => {
                 }
             }
         },
-        [dialogs, notifications, deleteWarehouse, refetch],
+        [dialogs, notifications, deleteWarehouse, refetch, t],
     );
 
     const initialState = useMemo(
@@ -187,46 +190,49 @@ export const WarehousesList: FC = () => {
 
     const columns = useMemo<GridColDef[]>(
         () => [
-            { field: 'id', headerName: 'ID' },
-            { field: 'name', headerName: 'Name', width: 140 },
-            { field: 'isActive', headerName: 'Active' },
-            { field: 'companyId', headerName: 'Company ID' },
-            { field: 'organizationId', headerName: 'Organization ID' },
-            { field: 'createdAt', headerName: 'Created At' },
-            { field: 'updatedAt', headerName: 'Updated At' },
+            { field: 'id', headerName: t('pages.dashboard.warehouses.columns.id') },
+            { field: 'name', headerName: t('pages.dashboard.warehouses.columns.name'), width: 140 },
+            { field: 'isActive', headerName: t('pages.dashboard.warehouses.columns.active') },
+            { field: 'companyId', headerName: t('pages.dashboard.warehouses.columns.companyId') },
+            { field: 'organizationId', headerName: t('pages.dashboard.warehouses.columns.organizationId') },
+            { field: 'createdAt', headerName: t('pages.dashboard.warehouses.columns.createdAt') },
+            { field: 'updatedAt', headerName: t('pages.dashboard.warehouses.columns.updatedAt') },
             {
                 field: 'actions',
                 type: 'actions',
+                headerName: t('common.actions.actions'),
                 flex: 1,
                 align: 'right',
                 getActions: ({ row }) => [
                     <GridActionsCellItem
                         key="edit-item"
                         icon={<EditIcon />}
-                        label="Edit"
+                        label={t('common.actions.edit')}
                         onClick={handleRowEdit(row)}
                     />,
                     <GridActionsCellItem
                         key="delete-item"
                         icon={<DeleteIcon />}
-                        label="Delete"
+                        label={t('common.actions.delete')}
                         onClick={handleRowDelete(row)}
                     />,
                 ],
             },
         ],
-        [handleRowEdit, handleRowDelete],
+        [handleRowEdit, handleRowDelete, t],
     );
 
-    const pageTitle = 'Warehouses';
+    const pageTitle = t('pages.dashboard.warehouses.title');
 
     return (
         <PageContainer
             title={pageTitle}
-            breadcrumbs={[{ title: pageTitle }]}
+            breadcrumbs={[
+                { title: pageTitle, path: '/dashboard/warehouses' },
+            ]}
             actions={
                 <Stack direction="row" alignItems="center" spacing={1}>
-                    <Tooltip title="Reload data" placement="right" enterDelay={1000}>
+                    <Tooltip title={t('common.actions.refresh')} placement="right" enterDelay={1000}>
                         <div>
                             <IconButton size="small" aria-label="refresh" onClick={handleRefresh}>
                                 <RefreshIcon />
@@ -238,7 +244,7 @@ export const WarehousesList: FC = () => {
                         onClick={handleCreateClick}
                         startIcon={<AddIcon />}
                     >
-                        Create Warehouse
+                        {t('pages.dashboard.warehouses.addWarehouse')}
                     </Button>
                 </Stack>
             }

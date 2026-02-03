@@ -5,7 +5,47 @@
         "contactUs": "Contactez-nous",
         "usernameOrEmailLabel": "Nom d'utilisateur ou Email",
         "passwordLabel": "Mot de passe",
-        "orDivider": "OU"
+        "orDivider": "OU",
+    "actions": {
+        "add": "Ajouter",
+        "edit": "Modifier",
+        "delete": "Supprimer",
+        "view": "Voir",
+        "refresh": "Actualiser",
+        "save": "Enregistrer",
+        "cancel": "Annuler",
+        "close": "Fermer",
+        "confirm": "Confirmer",
+        "back": "Retour",
+        "next": "Suivant",
+        "submit": "Soumettre",
+        "search": "Rechercher",
+        "filter": "Filtrer",
+        "export": "Exporter",
+        "import": "Importer",
+        "actions": "Actions"
+    },
+    "status": {
+        "active": "Actif",
+        "inactive": "Inactif",
+        "pending": "En attente",
+        "accepted": "Accepté",
+        "expired": "Expiré",
+        "completed": "Terminé",
+        "failed": "Échoué",
+        "loading": "Chargement...",
+        "noData": "Aucune donnée disponible",
+        "error": "Erreur",
+        "status": "Statut"
+    },
+    "messages": {
+        "deleteConfirm": "Êtes-vous sûr de vouloir supprimer {item} ? Cette action ne peut être annulée.",
+        "saveSuccess": "{item} enregistré avec succès.",
+        "deleteSuccess": "{item} supprimé avec succès.",
+        "errorOccurred": "Une erreur s'est produite : {error}",
+        "noResultsFound": "Aucun résultat trouvé",
+        "requiredField": "Ce champ est requis"
+    }
     },
     "pages": {
         "login": {
@@ -29,6 +69,229 @@
             "feature2Description": "Prenez des décisions éclairées avec des données d'inventaire à jour à portée de main.",
             "feature3Title": "Solutions évolutives",
             "feature3Description": "Que vous soyez une petite entreprise ou une grande entreprise, nous avons ce qu'il vous faut."
+        },
+        "dashboard": {
+            "title": "Tableau de bord",
+            "sidebar": {
+                "dashboard": "Tableau de bord",
+                "companies": "Entreprises",
+                "products": "Produits",
+                "users": "Utilisateurs",
+                "warehouses": "Entrepôts",
+                "settings": "Paramètres",
+                "logout": "Déconnexion"
+            },
+            "companies": {
+                "title": "Entreprises",
+                "addCompany": "Ajouter une entreprise",
+                "editCompany": "Modifier l'entreprise",
+                "deleteCompany": "Supprimer l'entreprise",
+                "companyDetails": "Détails de l'entreprise",
+                "columns": {
+                    "id": "ID",
+                    "legalName": "Nom légal",
+                    "brandName": "Nom de marque",
+                    "registrationNumber": "Numéro d'enregistrement",
+                    "taxId": "ID fiscal",
+                    "vatNumber": "Numéro de TVA",
+                    "currency": "Devise",
+                    "timezone": "Fuseau horaire",
+                    "phone": "Téléphone",
+                    "email": "Email",
+                    "website": "Site web",
+                    "actions": "Actions"
+                },
+                "form": {
+                    "legalNameLabel": "Nom légal",
+                    "tradeNameLabel": "Nom commercial",
+                    "taxIdLabel": "ID fiscal",
+                    "phoneLabel": "Téléphone",
+                    "emailLabel": "Email",
+                    "websiteLabel": "Site web",
+                    "addressLabel": "Adresse",
+                    "createCompany": "Créer une entreprise",
+                    "updateCompany": "Mettre à jour l'entreprise"
+                },
+                "messages": {
+                    "deleteConfirm": "Voulez-vous supprimer {name} ?",
+                    "deleteTitle": "Supprimer l'entreprise ?",
+                    "deleteSuccess": "Entreprise supprimée avec succès.",
+                    "deleteFailed": "Échec de la suppression de l'entreprise. Raison : {error}"
+                }
+            },
+            "products": {
+                "title": "Produits",
+                "addProduct": "Ajouter un produit",
+                "editProduct": "Modifier le produit",
+                "deleteProduct": "Supprimer le produit",
+                "productDetails": "Détails du produit",
+                "columns": {
+                    "id": "ID",
+                    "sku": "SKU",
+                    "name": "Nom du produit",
+                    "description": "Description",
+                    "tracking": "Suivi",
+                    "baseUomId": "UOM de base",
+                    "standardCost": "Coût standard",
+                    "sellingPrice": "Prix de vente",
+                    "active": "Actif",
+                    "actions": "Actions"
+                },
+                "form": {
+                    "skuLabel": "SKU",
+                    "nameLabel": "Nom du produit",
+                    "descriptionLabel": "Description",
+                    "trackingLabel": "Suivi",
+                    "baseUomIdLabel": "Unité de mesure de base",
+                    "standardCostLabel": "Coût standard",
+                    "sellingPriceLabel": "Prix de vente",
+                    "activeLabel": "Actif",
+                    "createProduct": "Créer un produit",
+                    "updateProduct": "Mettre à jour le produit"
+                },
+                "messages": {
+                    "deleteConfirm": "Êtes-vous sûr de vouloir supprimer ce produit ?",
+                    "deleteSuccess": "Produit supprimé avec succès.",
+                    "deleteFailed": "Échec de la suppression du produit. Raison : {error}"
+                }
+            },
+            "users": {
+                "title": "Utilisateurs",
+                "addUser": "Ajouter un utilisateur",
+                "editUser": "Modifier l'utilisateur",
+                "deleteUser": "Supprimer l'utilisateur",
+                "userDetails": "Détails de l'utilisateur",
+                "columns": {
+                    "id": "ID",
+                    "firstName": "Prénom",
+                    "lastName": "Nom",
+                    "email": "Email",
+                    "role": "Rôle",
+                    "avatarUrl": "URL de l'avatar",
+                    "phoneNumber": "Numéro de téléphone",
+                    "dateOfBirth": "Date de naissance",
+                    "gender": "Genre",
+                    "locale": "Langue",
+                    "active": "Actif",
+                    "actions": "Actions"
+                },
+                "form": {
+                    "firstNameLabel": "Prénom",
+                    "lastNameLabel": "Nom",
+                    "emailLabel": "Email",
+                    "roleLabel": "Rôle",
+                    "activeLabel": "Actif",
+                    "createUser": "Créer un utilisateur",
+                    "updateUser": "Mettre à jour l'utilisateur"
+                }
+            },
+            "invitations": {
+                "title": "Invitations",
+                "sendInvitation": "Envoyer une invitation",
+                "editInvitation": "Modifier l'invitation",
+                "deleteInvitation": "Supprimer l'invitation",
+                "invitationDetails": "Détails de l'invitation",
+                "loadingInvitations": "Chargement des invitations...",
+                "columns": {
+                    "id": "ID",
+                    "email": "Email",
+                    "role": "Rôle",
+                    "status": "Statut",
+                    "senderEmail": "Envoyé par",
+                    "createdAt": "Créé",
+                    "expiresAt": "Expire",
+                    "actions": "Actions"
+                },
+                "form": {
+                    "emailLabel": "Email",
+                    "roleLabel": "Rôle",
+                    "expiresAtLabel": "Expire le",
+                    "sendInvitation": "Envoyer l'invitation",
+                    "updateInvitation": "Mettre à jour l'invitation"
+                },
+                "messages": {
+                    "deleteConfirm": "Êtes-vous sûr de vouloir supprimer cette invitation ? Cette action ne peut être annulée.",
+                    "deleteTitle": "Supprimer l'invitation",
+                    "deleteSuccess": "Invitation supprimée avec succès.",
+                    "deleteError": "Erreur lors de la suppression de l'invitation."
+                }
+            },
+            "warehouses": {
+                "title": "Entrepôts",
+                "addWarehouse": "Ajouter un entrepôt",
+                "editWarehouse": "Modifier l'entrepôt",
+                "deleteWarehouse": "Supprimer l'entrepôt",
+                "warehouseDetails": "Détails de l'entrepôt",
+                "columns": {
+                    "id": "ID",
+                    "name": "Nom",
+                    "code": "Code",
+                    "address": "Adresse",
+                    "active": "Actif",
+                    "companyId": "ID Entreprise",
+                    "organizationId": "ID Organisation",
+                    "createdAt": "Créé le",
+                    "updatedAt": "Mis à jour le",
+                    "actions": "Actions"
+                },
+                "form": {
+                    "nameLabel": "Nom",
+                    "codeLabel": "Code",
+                    "addressLabel": "Adresse",
+                    "activeLabel": "Actif",
+                    "createWarehouse": "Créer un entrepôt",
+                    "updateWarehouse": "Mettre à jour l'entrepôt"
+                }
+            },
+            "uom": {
+                "title": "Unités de mesure",
+                "addUom": "Ajouter une unité de mesure",
+                "editUom": "Modifier l'unité de mesure",
+                "deleteUom": "Supprimer l'unité de mesure",
+                "columns": {
+                    "id": "ID",
+                    "name": "Nom",
+                    "code": "Code",
+                    "baseUnit": "Unité de base",
+                    "conversionFactor": "Facteur de conversion",
+                    "category": "Catégorie",
+                    "ratioToBase": "Ratio de base",
+                    "actions": "Actions"
+                },
+                "messages": {
+                    "deleteConfirm": "Êtes-vous sûr de vouloir supprimer cette unité de mesure ? Cette action ne peut être annulée.",
+                    "deleteTitle": "Supprimer l'UOM",
+                    "deleteSuccess": "UOM supprimée avec succès.",
+                    "deleteError": "Erreur lors de la suppression de l'UOM."
+                }
+            },
+            "lots": {
+                "title": "Lots de produits",
+                "addLot": "Ajouter un lot",
+                "editLot": "Modifier le lot",
+                "deleteLot": "Supprimer le lot",
+                "columns": {
+                    "id": "ID",
+                    "lotNumber": "Numéro de lot",
+                    "productId": "Produit",
+                    "quantity": "Quantité",
+                    "expiryDate": "Date d'expiration",
+                    "manufactureDate": "Date de fabrication",
+                    "qcState": "État QC",
+                    "actions": "Actions"
+                }
+            },
+            "home": {
+                "grid": {
+                    "pageTitle": "Titre de page",
+                    "status": "Statut",
+                    "users": "Utilisateurs",
+                    "eventCount": "Nombre d'événements",
+                    "viewsPerUser": "Vues par utilisateur",
+                    "averageTime": "Temps moyen",
+                    "dailyConversions": "Conversions quotidiennes"
+                }
+            }
         }
     }
 }

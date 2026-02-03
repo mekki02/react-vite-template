@@ -6,32 +6,49 @@ import { useForm } from "react-hook-form";
 import { generateField, type IFieldSchema } from "../../utils/forms";
 import { Navigate, useNavigate } from "react-router-dom";
 import DebbouLogo from '../../assets/debbou_logo.png';
-import { useAuthStatus } from "../../hooks";
-// import { useAppContext } from "../../hooks/context/context";
+import { useLoginMutation } from "../dashboard/redux/slices/auth/authSlice";
+import useNotifications from "../../hooks/context/notification";
+import type { LoginCredentials } from "../dashboard/types";
+import { useAuthWithNavigation } from "../../hooks/useAuthWithNavigation";
 
 const Login: FC = (): JSX.Element => {
-    // const { setActiveUser } = useAppContext();
     const navigate = useNavigate();
-    const { isAuthenticated, isLoading } = useAuthStatus();
+    const { isAuthenticated, isLoading, login } = useAuthWithNavigation();
+    const [loginMutation] = useLoginMutation();
+    const notifications = useNotifications();
     const methods = useForm();
-    const { handleSubmit, control, formState: { errors }, getValues } = methods;
+    const { handleSubmit, control, formState: { errors } } = methods;
     const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => setShowPassword(!showPassword);
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => event.preventDefault();
 
-
-    const onSubmit = () => {
-        const { username, password } = getValues();
-        console.log("Login submitted with:", { username, password });
-        // loginMutation.mutate({ username, password })
+    const onSubmit = async (data: any) => {
+        try {
+            const loginData: LoginCredentials = {
+                email: data.email,
+                password: data.password
+            };
+            const result = await loginMutation(loginData).unwrap();
+            login(result.token, result.refreshToken);
+            notifications.show('Login successful!', {
+                severity: 'success',
+                autoHideDuration: 3000,
+            });
+            navigate('/dashboard');
+        } catch (error: unknown) {
+            const errorMessage = error instanceof Error ? error.message : 'Login failed. Please check your credentials.';
+            notifications.show(errorMessage, {
+                severity: 'error',
+                autoHideDuration: 5000,
+            });
+        }
     };
 
     const loginSchema: Array<IFieldSchema> = [
         {
-            name: 'Email',
+            name: 'email',
             component: TextField,
             rules: {
-
                 required: "Email is required",
                 // pattern: {
                 //     value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
@@ -41,8 +58,8 @@ const Login: FC = (): JSX.Element => {
             label: "Email",
             variant: "outlined",
             control,
-            error: !!errors.username,
-            helperText: errors.username ? String(errors.username.message) : ''
+            error: !!errors.email,
+            helperText: errors.email ? String(errors.email.message) : ''
         },
         {
             name: 'password',
