@@ -17,7 +17,7 @@ const RegisterExample: FC = (): JSX.Element => {
     const onSubmit = async (data: RegisterData) => {
         try {
             const result = await registerMutation(data).unwrap();
-            login(result.token, result.refreshToken);
+            login(result.result?.accessToken!, result.result?.refreshToken!);
             notifications.show('Registration successful! Please check your email to verify your account.', {
                 severity: 'success',
                 autoHideDuration: 5000,
