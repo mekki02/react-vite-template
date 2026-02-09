@@ -256,7 +256,7 @@ export const ProductsList: FC = () => {
         return (
             <Box sx={{ height: '100%', width: '100%' }}>
                 <DataGrid
-                    rows={productsData?.data || []}
+                    rows={productsData?.result || []}
                     columns={columns}
                     paginationModel={paginationModel}
                     onPaginationModelChange={handlePaginationModelChange}

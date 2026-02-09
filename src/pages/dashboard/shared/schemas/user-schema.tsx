@@ -34,13 +34,13 @@ export const userFormSchema: Array<IFieldSchema> = [
     {
         name: 'role',
         label: 'Role',
-        component: forwardRef(({ options, ...props }: { options: Array<{ label: string; value: string }> }, ref) => (
+        component: forwardRef(({ options, ...props }: { options: Array<{ label: string; value: string; disabled?: boolean }> }, ref) => (
             <>
                 <InputLabel id="demo-simple-select-label" > Role </InputLabel>
                 <Select label="Role" {...props} ref={ref} >
                     {
                         options.map(option => (
-                            <MenuItem key={option.value} value={option.value} >
+                            <MenuItem key={option.value} value={option.value} disabled={option.disabled} >
                                 {option.label}
                             </MenuItem>
                         ))
@@ -52,7 +52,8 @@ export const userFormSchema: Array<IFieldSchema> = [
             required: "Role is required",
         },
         options: [
-            { label: 'Owner', value: 'owner' },
+            { label: 'Root', value: 'root', disabled: true },
+            { label: 'User', value: 'user' },
             { label: 'Admin', value: 'admin' },
         ]
     },

@@ -5,6 +5,7 @@ import PageContainer from '../../../shared/page-container';
 import CompanyForm, { type CompanyFormState } from '../company-form';
 import { useCallback, useEffect } from 'react';
 import type { Company } from '../../../types';
+import { parseJwt } from '@utils/jwt';
 
 const defaultCompanyValues: Partial<Company> = {
     legalName: '',
@@ -22,6 +23,9 @@ export default function CompanyCreate() {
     const notifications = useNotifications();
 
     const [createCompany, { isLoading: isCreating, isSuccess: isCreateSuccess, isError: isCreateError }] = useCreateCompanyMutation();
+
+    const token = sessionStorage.getItem('token');
+    const organizationId = parseJwt(token || '')?.organizationID;
 
     useEffect(() => {
         if (isCreateSuccess) {
@@ -42,8 +46,8 @@ export default function CompanyCreate() {
     }, [isCreateError]);
 
     const handleSubmit = useCallback(async (formValues: Partial<CompanyFormState['values']>) => {
-        createCompany({ ...formValues });
-    }, []);
+        createCompany({ ...formValues, organizationId });
+    }, [organizationId]);
 
     return (
         <PageContainer

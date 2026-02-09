@@ -14,20 +14,13 @@ import type {
 export const authApi = createApi({
     reducerPath: 'authApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: '/api/auth',
-        prepareHeaders: (headers) => {
-            const token = localStorage.getItem('token')
-            if (token) {
-                headers.set('authorization', `Bearer ${token}`)
-            }
-            return headers
-        },
+        baseUrl: 'http://localhost:5001/api/authenticate',
     }),
     tagTypes: ['Auth'],
     endpoints: builder => ({
         login: builder.mutation<AuthResponse, LoginCredentials>({
             query: (credentials) => ({
-                url: 'login',
+                url: '',
                 method: 'POST',
                 body: credentials,
             }),

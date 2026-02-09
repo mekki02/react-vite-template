@@ -19,13 +19,15 @@ export const InvitationView: FC = () => {
     const navigate = useNavigate();
 
     const {
-        data: invitation,
+        data,
         isLoading,
         isError,
         error,
     } = useGetInvitationByIdQuery(invitationId!, {
         skip: !invitationId,
     });
+
+    const { result: invitation } = data ?? {};
 
     const handleEdit = useCallback(() => {
         navigate(`/dashboard/users/invitations/${invitationId}/edit`);

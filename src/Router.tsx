@@ -42,6 +42,11 @@ const LotView = lazy(() => import("@pages/dashboard/pages/products/lots/lot-view
 const UOMList = lazy(() => import("@pages/dashboard/pages/products/uom/index"));
 const UOMCreate = lazy(() => import("@pages/dashboard/pages/products/uom/create-uom/index"));
 const UOMUpdate = lazy(() => import("@pages/dashboard/pages/products/uom/update-uom/index"));
+
+const OrganizationsList = lazy(() => import("@pages/dashboard/pages/organizations/index"));
+const OrganizationCreate = lazy(() => import("@pages/dashboard/pages/organizations/create-organization/index"));
+const OrganizationUpdate = lazy(() => import("@pages/dashboard/pages/organizations/update-organization/index"));
+const OrganizationView = lazy(() => import("@pages/dashboard/pages/organizations/organization-view/index"));
 const UOMView = lazy(() => import("@pages/dashboard/pages/products/uom/uom-view/index"));
  
 
@@ -267,6 +272,30 @@ export const router = createBrowserRouter([
                 path: "products/uom/:uomId/edit",
                 element: (
                     <UOMUpdate />
+                )
+            },
+            {
+                path: "organizations",
+                element: (
+                    <OrganizationsList />
+                )
+            },
+            {
+                path: "organizations/create",
+                element: (
+                    <OrganizationCreate />
+                )
+            },
+            {
+                path: "organizations/:organizationId",
+                element: (
+                    <OrganizationView />
+                )
+            },
+            {
+                path: "organizations/:organizationId/edit",
+                element: (
+                    <OrganizationUpdate />
                 )
             }
         ]

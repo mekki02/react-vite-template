@@ -16,34 +16,34 @@ export interface User {
 }
 
 export interface Company {
-    id: string;
-    legalName: string;
-    brandName: string;
-    registrationNumber: string;
-    taxId: string;
-    vatNumber: string;
-    currency: string;
-    timezone: string;
-    organizationId: string;
+  id: string;
+  legalName: string;
+  brandName: string;
+  registrationNumber: string;
+  taxId: string;
+  vatNumber: string;
+  currency: string;
+  timezone: string;
+  organizationId: string;
 }
 
 export interface Warehouse {
-    id: string;
-    name: string;
-    code: string;
-    isActive: boolean;
-    companyId: string;
-    organizationId: string;
-    address: Record<string, unknown>;
-    createdAt: string;
-    updatedAt: string;
+  id: string;
+  name: string;
+  code: string;
+  isActive: boolean;
+  companyId: string;
+  organizationId: string;
+  address: Record<string, unknown>;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Resource {
-    id: string;
-    title: string;
-    type: string;
-    owner: string;
+  id: string;
+  title: string;
+  type: string;
+  owner: string;
 }
 
 export interface Product {
@@ -75,7 +75,7 @@ export interface Lot {
   organizationId: string;
   productId: string;
   lotNumber: string;
-  manufactureDate: string | undefined ;
+  manufactureDate: string | undefined;
   expirationDate: string | undefined;
   status: 'released' | 'quarantined' | 'expired';
   qcState: 'pending' | 'passed' | 'failed';
@@ -109,9 +109,37 @@ export interface UOM {
   updatedAt: string;
 }
 
+export interface Organization {
+  createdAt: string,
+  id: string,
+  isActive: boolean,
+  name: string,
+  plan: string,
+  updatedAt: string
+}
+
+export interface CrudParameters {
+  page: number;
+  pageSize: number;
+  search: string;
+}
+
+export interface ApiResponse<T> {
+  code: number;
+  success: boolean;
+  result: T;
+  totalCount: number;
+}
+
+export interface ApiError {
+  code: number;
+  success: boolean;
+  error: string;
+}
+
 // Auth Types
 export interface LoginCredentials {
-  email: string;
+  username: string;
   password: string;
 }
 
@@ -134,9 +162,14 @@ export interface ResetPasswordData {
 }
 
 export interface AuthResponse {
-  user: User;
-  token: string;
-  refreshToken: string;
+  code: number,
+  success: boolean,
+  error?: string
+  result?: {
+    accessToken: string,
+    expiration: string,
+    refreshToken: string
+  },
 }
 
 export interface VerifyEmailResponse {

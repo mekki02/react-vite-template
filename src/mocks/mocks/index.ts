@@ -1,5 +1,5 @@
 import { countries } from "@constants/countries";
-import type { User, Resource, Warehouse, Company, Product, Lot, Invitation, UOM } from "@pages/dashboard/types";
+import type { User, Resource, Warehouse, Company, Product, Lot, Invitation, UOM, Organization } from "@pages/dashboard/types";
 
 export const users: User[] = Array.from({ length: 100 }, (_, index) => ({
     id: crypto.randomUUID(),
@@ -147,3 +147,12 @@ export const uom: UOM[] = Array.from({ length: 25 }, (_, index) => {
         updatedAt: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString(),
     };
 });
+
+export const organizations: Organization[] = Array.from({ length: 20 }, (_, index) => ({
+    id: crypto.randomUUID(),
+    name: `Organization ${index + 1}`,
+    isActive: index % 10 !== 0, // 90% active
+    plan: ['Basic', 'Professional', 'Enterprise'][index % 3],
+    createdAt: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000).toISOString(),
+    updatedAt: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString(),
+}));

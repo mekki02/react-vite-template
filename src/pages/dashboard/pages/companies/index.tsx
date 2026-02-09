@@ -249,7 +249,7 @@ export const CompaniesList: FC = () => {
                     </Box>
                 ) : (
                     <DataGrid
-                        rows={data?.data ?? []}
+                        rows={data?.result ?? []}
                         rowCount={data?.totalCount ?? 0}
                         columns={columns}
                         pagination

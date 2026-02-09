@@ -15,6 +15,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import CategoryIcon from '@mui/icons-material/Category';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import StraightenIcon from '@mui/icons-material/Straighten';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import { matchPath, useLocation } from 'react-router';
 import DashboardSidebarPageItem from './DashboardSidebarPageItem';
 import {
@@ -147,6 +148,13 @@ export default function DashboardSidebar({
             />
             <DashboardSidebarDividerItem />
             <DashboardSidebarHeaderItem>Management</DashboardSidebarHeaderItem>
+            <DashboardSidebarPageItem
+              id="organizations"
+              title="Organizations"
+              icon={<AccountBalanceIcon />}
+              href="/dashboard/organizations"
+              selected={!!matchPath('/dashboard/organizations/*', pathname)}
+            />
             <DashboardSidebarPageItem
               id="users"
               title="Users"

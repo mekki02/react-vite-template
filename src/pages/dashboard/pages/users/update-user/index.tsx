@@ -15,7 +15,7 @@ export const UserUpdate: FC = (): JSX.Element => {
     const navigate = useNavigate();
     const notifications = useNotifications();
     const {
-        data: user,
+        data,
         isLoading,
         isError: isFetchError,
         isSuccess: isFetchSuccess,
@@ -24,7 +24,7 @@ export const UserUpdate: FC = (): JSX.Element => {
         skip: !userId,
     });
 
-    console.log(user)
+    const {result: user} = data || {}
 
     const [updateUser, { isLoading: isUpdating, isSuccess: isUpdateSuccess, isError: isUpdateError }] = useUpdateUserMutation();
     

@@ -4,6 +4,7 @@ import { useCreateWarehouseMutation } from '../../../redux/slices/warehouses/war
 import PageContainer from '../../../shared/page-container';
 import WarehouseForm, { type WarehouseFormState } from '../warehouse-form';
 import { useCallback, useEffect } from 'react';
+import { parseJwt } from '@utils/jwt';
 
 const defaultWarehouseValues = {
     name: "",
@@ -26,6 +27,8 @@ export default function WarehouseCreate() {
     const notifications = useNotifications();
 
     const [createWarehouse, { isLoading: isCreating, isSuccess: isCreateSuccess, isError: isCreateError }] = useCreateWarehouseMutation();
+    const token = sessionStorage.getItem('token');
+    const organizationId = parseJwt(token || '')?.organizationID;
 
     useEffect(() => {
         if (isCreateSuccess) {
@@ -46,8 +49,8 @@ export default function WarehouseCreate() {
     }, [isCreateError]);
 
     const handleSubmit = useCallback(async (formValues: Partial<WarehouseFormState['values']>) => {
-        createWarehouse({ ...formValues });
-    }, []);
+        createWarehouse({ ...formValues, organizationId });
+    }, [organizationId]);
 
     return (
         <PageContainer

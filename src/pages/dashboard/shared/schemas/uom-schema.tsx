@@ -36,13 +36,9 @@ export const uomFormSchema: Array<IFieldSchema> = [
             required: "Category is required",
         },
         options: [
-            { label: 'Weight', value: 'Weight' },
-            { label: 'Volume', value: 'Volume' },
-            { label: 'Length', value: 'Length' },
-            { label: 'Area', value: 'Area' },
-            { label: 'Count', value: 'Count' },
-            { label: 'Time', value: 'Time' },
-            { label: 'Temperature', value: 'Temperature' },
+            { label: 'Unit', value: 'unit' },
+            { label: 'Volume', value: 'volume' },
+            { label: 'Weight', value: 'weight' },
         ]
     },
     {

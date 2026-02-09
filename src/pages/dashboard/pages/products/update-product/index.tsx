@@ -15,7 +15,7 @@ export const ProductUpdate: FC = (): JSX.Element => {
     const navigate = useNavigate();
     const notifications = useNotifications();
     const {
-        data: product,
+        data,
         isLoading,
         isError: isFetchError,
         isSuccess: isFetchSuccess,
@@ -23,6 +23,8 @@ export const ProductUpdate: FC = (): JSX.Element => {
     } = useGetProductByIdQuery(productId!, {
         skip: !productId,
     });
+
+    const { result: product } = data || {};
 
     const [updateProduct, { isLoading: isUpdating, isSuccess: isUpdateSuccess, isError: isUpdateError }] = useUpdateProductMutation();
     

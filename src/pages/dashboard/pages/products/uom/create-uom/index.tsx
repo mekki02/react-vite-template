@@ -7,13 +7,16 @@ import useNotifications from '../../../../../../hooks/context/notification';
 import PageContainer from '../../../../shared/page-container';
 import { useCallback, useEffect, useMemo, type FC, type JSX } from 'react';
 import { useCreateUOMMutation } from '../../../../redux/slices/uom/uomSlice';
+import { parseJwt } from '@utils/jwt';
 
 export const UOMCreate: FC = (): JSX.Element => {
     const navigate = useNavigate();
     const notifications = useNotifications();
 
     const [createUOM, { isLoading: isCreating, isSuccess: isCreateSuccess, isError: isCreateError, error }] = useCreateUOMMutation();
-    
+    const token = sessionStorage.getItem('token');
+    const organizationId = parseJwt(token || '')?.organizationID;
+
     useEffect(() => {
         if (isCreateSuccess) {
             notifications.show('UOM created successfully.', {
@@ -37,7 +40,7 @@ export const UOMCreate: FC = (): JSX.Element => {
         async (formValues: Partial<UOMFormState['values']>) => {
             const uomData = {
                 ...formValues,
-                organizationId: 'org-123', // This would come from user context
+                organizationId,
                 ratioToBase: formValues.isBase ? 1 : formValues.ratioToBase,
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString(),
@@ -58,6 +61,12 @@ export const UOMCreate: FC = (): JSX.Element => {
 
         return (
             <UOMForm
+                defaultValues={{
+                    name: '',
+                    category: '',
+                    isBase: false,
+                    ratioToBase: 1.1,
+                }}
                 isSubmitting={isCreating}
                 onSubmit={handleSubmit}
                 submitButtonLabel="Create UOM"

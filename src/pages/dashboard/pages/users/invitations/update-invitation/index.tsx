@@ -14,13 +14,15 @@ export const InvitationUpdate: FC = (): JSX.Element => {
     const notifications = useNotifications();
 
     const {
-        data: invitation,
+        data,
         isLoading: isLoadingInvitation,
         isError: isInvitationError,
         error: invitationError,
     } = useGetInvitationByIdQuery(invitationId!, {
         skip: !invitationId,
     });
+
+    const { result: invitation } = data ?? {};
 
     const [updateInvitation, { isLoading: isUpdating, isSuccess: isUpdateSuccess, isError: isUpdateError, error }] = useUpdateInvitationMutation();
     

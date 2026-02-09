@@ -10,9 +10,11 @@ const LotView: React.FC = () => {
     const navigate = useNavigate();
     const { lotId } = useParams<{ lotId: string }>();
 
-    const { data: lot, isLoading, error } = useGetLotByIdQuery(lotId!, {
+    const { data, isLoading, error } = useGetLotByIdQuery(lotId!, {
         skip: !lotId,
     });
+
+    const { result: lot } = data ?? {};
 
     const handleEditLot = () => {
         navigate(`/dashboard/products/lots/${lotId}/edit`);

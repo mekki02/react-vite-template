@@ -1,28 +1,35 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import type { Warehouse } from '../../../types';
+import type { ApiResponse, CrudParameters, Warehouse } from '../../../types';
 
 export const warehousesApi = createApi({
     reducerPath: 'warehousesApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: '/api',
+        baseUrl: 'http://localhost:5001/api',
+        prepareHeaders: (headers) => {
+            const token = sessionStorage.getItem('token')
+            if (token) {
+                headers.set('authorization', `Bearer ${token}`)
+            }
+            return headers
+        },
     }),
     tagTypes: ['Warehouses'],
     endpoints: builder => ({
         getWarehouses: builder.query<
-            { data: Warehouse[]; totalCount: number },
-            { page: number; pageSize: number; search: string }
+            ApiResponse<Warehouse[]>,
+            CrudParameters & { organizationId: string }
         >({
-            query: params => ({
-                url: 'warehouses',
+            query: ({ organizationId, ...params }) => ({
+                url: `/organizations/${organizationId}/warehouses`,
                 params,
             }),
             providesTags: ['Warehouses'],
         }),
-        getWarehouseById: builder.query<Warehouse, string>({
+        getWarehouseById: builder.query<ApiResponse<Warehouse>, string>({
             query: id => `warehouses/${id}`,
             providesTags: ['Warehouses'],
         }),
-        createWarehouse: builder.mutation<Warehouse, Partial<Warehouse>>({
+        createWarehouse: builder.mutation<ApiResponse<Warehouse>, Partial<Warehouse & { organizationId: string }>>({
             query: newWarehouse => ({
                 url: 'warehouses',
                 method: 'POST',
@@ -30,7 +37,7 @@ export const warehousesApi = createApi({
             }),
             invalidatesTags: ['Warehouses'],
         }),
-        updateWarehouse: builder.mutation<Warehouse, Partial<Warehouse> & { id: string }>({
+        updateWarehouse: builder.mutation<ApiResponse<Warehouse>, Partial<Warehouse> & { id: string }>({
             query: ({ id, ...patch }) => ({
                 url: `warehouses/${id}`,
                 method: 'PUT',
@@ -38,7 +45,7 @@ export const warehousesApi = createApi({
             }),
             invalidatesTags: ['Warehouses'],
         }),
-        deleteWarehouse: builder.mutation<{ success: boolean; id: string }, string>({
+        deleteWarehouse: builder.mutation<void, string>({
             query: id => ({
                 url: `warehouses/${id}`,
                 method: 'DELETE',

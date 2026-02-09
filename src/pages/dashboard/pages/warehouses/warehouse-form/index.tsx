@@ -10,6 +10,9 @@ import type { Warehouse } from '../../../types';
 import { useForm } from 'react-hook-form';
 import { getSchema } from '../../../shared/schemas';
 import { generateField, type IFieldSchema } from '../../../../../utils/forms';
+import { useGetCompaniesQuery } from '@utils/redux';
+import { InputLabel, MenuItem, Select } from '@mui/material';
+import { forwardRef } from 'react';
 
 export interface WarehouseFormState {
     values: Partial<Omit<Warehouse, 'id'>>;
@@ -54,7 +57,35 @@ export default function WarehouseForm(props: WarehouseFormProps) {
         navigate(backButtonPath ?? '/dashboard/warehouses');
     }, [navigate, backButtonPath]);
 
-    const warehouseSchema = getSchema('warehouse', control, errors) as IFieldSchema[];
+    const { data } = useGetCompaniesQuery({
+        page: 1,
+        pageSize: 100,
+        search: '',
+    });
+
+    const { result: companies } = data ?? {};
+
+    const warehouseSchema = getSchema('warehouse', control, errors, [{
+        name: 'companyId',
+        options: (companies) ? companies.map(company => ({
+            label: company.legalName,
+            value: company.id,
+        })) : [],
+        component: forwardRef(({ options, ...props }: { options: Array<{ label: string; value: string; disabled?: boolean }> }, ref) => (
+            <>
+                <InputLabel id="demo-simple-select-label" > Company </InputLabel>
+                <Select label="Company" {...props} ref={ref} >
+                    {
+                        options.map(option => (
+                            <MenuItem key={option.value} value={option.value} disabled={option.disabled} >
+                                {option.label}
+                            </MenuItem>
+                        ))
+                    }
+                </Select>
+            </>
+        )),
+    }]) as IFieldSchema[];
     const warehouseFormfields = warehouseSchema.map(generateField);
 
     return (

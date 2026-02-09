@@ -22,13 +22,15 @@ export const ProductView: FC = (): JSX.Element => {
     const notifications = useNotifications();
 
     const {
-        data: product,
+        data,
         isLoading,
         isError,
         error,
     } = useGetProductByIdQuery(productId!, {
         skip: !productId,
     });
+
+    const { result: product } = data || {};
 
     useEffect(() => {
         if (isError) {

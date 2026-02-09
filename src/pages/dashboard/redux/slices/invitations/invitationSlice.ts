@@ -1,16 +1,24 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import type { Invitation } from '../../../types';
+import type { ApiResponse, Invitation } from '../../../types';
+import type { CrudParameters } from '../../../types';
 
 export const invitationsApi = createApi({
     reducerPath: 'invitationsApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: '/api',
+        baseUrl: 'http://localhost:5001/api',
+        prepareHeaders: (headers) => {
+            const token = sessionStorage.getItem('token')
+            if (token) {
+                headers.set('authorization', `Bearer ${token}`)
+            }
+            return headers
+        },
     }),
     tagTypes: ['Invitations'],
     endpoints: builder => ({
         getInvitations: builder.query<
-            { data: Invitation[]; totalCount: number },
-            { page: number; pageSize: number; search: string }
+            ApiResponse<Invitation[]>,
+            CrudParameters
         >({
             query: params => ({
                 url: 'invitations',
@@ -18,11 +26,11 @@ export const invitationsApi = createApi({
             }),
             providesTags: ['Invitations'],
         }),
-        getInvitationById: builder.query<Invitation, string>({
+        getInvitationById: builder.query<ApiResponse<Invitation>, string>({
             query: id => `invitations/${id}`,
             providesTags: ['Invitations'],
         }),
-        createInvitation: builder.mutation<Invitation, Partial<Invitation>>({
+        createInvitation: builder.mutation<ApiResponse<Invitation>, Partial<Invitation>>({
             query: newInvitation => ({
                 url: 'invitations',
                 method: 'POST',
@@ -30,7 +38,7 @@ export const invitationsApi = createApi({
             }),
             invalidatesTags: ['Invitations'],
         }),
-        updateInvitation: builder.mutation<Invitation, Partial<Invitation> & { id: string }>({
+        updateInvitation: builder.mutation<ApiResponse<Invitation>, Partial<Invitation> & { id: string }>({
             query: ({ id, ...patch }) => ({
                 url: `invitations/${id}`,
                 method: 'PUT',
@@ -38,7 +46,7 @@ export const invitationsApi = createApi({
             }),
             invalidatesTags: ['Invitations'],
         }),
-        deleteInvitation: builder.mutation<{ success: boolean; id: string }, string>({
+        deleteInvitation: builder.mutation<void, string>({
             query: id => ({
                 url: `invitations/${id}`,
                 method: 'DELETE',

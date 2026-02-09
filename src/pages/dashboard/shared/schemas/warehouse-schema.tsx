@@ -29,16 +29,34 @@ export const warehouseFormSchema: Array<IFieldSchema> = [
                 ref={ref}
                 checked={!!value}
                 onChange={(e) => onChange(e.target.checked)}
-            />} label={label} labelPlacement={labelPlacement}/>
+            />} label={label} labelPlacement={labelPlacement} />
         )),
     },
     {
         name: 'companyId',
         label: 'Company ID',
-        component: TextField,
+        component: forwardRef(({ options, ...props }: { options: Array<{ label: string; value: string; disabled?: boolean }> }, ref) => (
+            <>
+                <InputLabel id="demo-simple-select-label" > Company </InputLabel>
+                <Select label="Company" {...props} ref={ref} >
+                    {
+                        options.map(option => (
+                            <MenuItem key={option.value} value={option.value} disabled={option.disabled} >
+                                {option.label}
+                            </MenuItem>
+                        ))
+                    }
+                </Select>
+            </>
+        )),
         rules: {
-            required: "Company ID is required",
-        }
+            required: "Company is required",
+        },
+        options: [
+            { label: 'Root', value: 'root', disabled: true },
+            { label: 'User', value: 'user' },
+            { label: 'Admin', value: 'admin' },
+        ]
     },
     {
         name: 'address.country',
@@ -91,9 +109,6 @@ export const warehouseFormSchema: Array<IFieldSchema> = [
         name: 'address.buildingNumber',
         label: 'Building Number',
         component: TextField,
-        type: 'number',
-        rules: {
-            required: "Building Number is required",
-        }
+        type: 'number'
     }
 ];

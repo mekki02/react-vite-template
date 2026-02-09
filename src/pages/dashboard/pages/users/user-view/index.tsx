@@ -10,9 +10,11 @@ const UserView: React.FC = () => {
     const navigate = useNavigate();
     const { userId } = useParams<{ userId: string }>();
 
-    const { data: user, isLoading, error } = useGetUserByIdQuery(userId!, {
+    const { data, isLoading, error } = useGetUserByIdQuery(userId!, {
         skip: !userId,
     });
+
+    const { result: user } = data ?? {};
 
     const handleEditUser = () => {
         navigate(`/dashboard/users/${userId}/edit`);

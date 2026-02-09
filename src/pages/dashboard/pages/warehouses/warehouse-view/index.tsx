@@ -10,9 +10,11 @@ const WarehouseView: React.FC = () => {
     const navigate = useNavigate();
     const { warehouseId } = useParams<{ warehouseId: string }>();
 
-    const { data: warehouse, isLoading, error } = useGetWarehouseByIdQuery(warehouseId!, {
+    const { data, isLoading, error } = useGetWarehouseByIdQuery(warehouseId!, {
         skip: !warehouseId,
     });
+
+    const { result: warehouse } = data ?? {};
 
     const handleEditWarehouse = () => {
         navigate(`/dashboard/warehouses/${warehouseId}/edit`);

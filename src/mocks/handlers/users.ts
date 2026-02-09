@@ -50,7 +50,7 @@ export const userHandlers = [
         return HttpResponse.json(newUser, { status: 201 });
     }),
 
-    http.put<{ id: string }>("/api/users/:id", async ({ request, params },) => {
+    http.patch<{ id: string }>("/api/users/:id", async ({ request, params },) => {
         const { id } = params;
         const updatedUser = await request.json() as User;
         const userIndex = users.findIndex((user) => user.id === id);

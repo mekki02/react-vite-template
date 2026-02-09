@@ -14,13 +14,15 @@ export const UOMUpdate: FC = (): JSX.Element => {
     const notifications = useNotifications();
 
     const {
-        data: uom,
+        data,
         isLoading: isLoadingUOM,
         isError: isUOMError,
         error: uomError,
     } = useGetUOMByIdQuery(uomId || '', {
         skip: !uomId,
     });
+
+    const { result: uom } = data || {};
 
     const [updateUOM, { isLoading: isUpdating, isSuccess: isUpdateSuccess, isError: isUpdateError, error }] = useUpdateUOMMutation();
     

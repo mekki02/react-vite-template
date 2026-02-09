@@ -258,7 +258,7 @@ export const UsersList: FC = () => {
                     </Box>
                 ) : (
                     <DataGrid
-                        rows={data?.data ?? []}
+                        rows={data?.result ?? []}
                         rowCount={data?.totalCount ?? 0}
                         columns={columns}
                         pagination

@@ -1,32 +1,41 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import type { Lot } from '../../../types';
+import type { ApiResponse, CrudParameters, Lot } from '../../../types';
 
 export const lotsApi = createApi({
     reducerPath: 'lotsApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: '/api',
+        baseUrl: 'http://localhost:5001/api',
+        prepareHeaders: (headers) => {
+            const token = sessionStorage.getItem('token')
+            if (token) {
+                headers.set('authorization', `Bearer ${token}`)
+            }
+            return headers
+        },
     }),
     tagTypes: ['Lots'],
     endpoints: builder => ({
         getLots: builder.query<
-            { data: Lot[]; totalCount: number },
-            { page: number; pageSize: number; search: string; productId?: string }
+            ApiResponse<Lot[]>,
+            CrudParameters & { organizationId: string }
         >({
-            query: params => ({
-                url: 'lots',
-                params,
-            }),
+            query: ({organizationId, ...params}) => {
+                return ({
+                    url: `/organizations/${organizationId}/lots`,
+                    params,
+                })
+            },
             providesTags: ['Lots'],
         }),
-        getLotById: builder.query<Lot, string>({
+        getLotById: builder.query<ApiResponse<Lot>, string>({
             query: id => `lots/${id}`,
             providesTags: ['Lots'],
         }),
-        getLotsByProductId: builder.query<Lot[], string>({
+        getLotsByProductId: builder.query<ApiResponse<Lot[]>, string>({
             query: productId => `lots?productId=${productId}`,
             providesTags: ['Lots'],
         }),
-        createLot: builder.mutation<Lot, Partial<Lot>>({
+        createLot: builder.mutation<ApiResponse<Lot>, Partial<Lot>>({
             query: newLot => ({
                 url: 'lots',
                 method: 'POST',
@@ -34,7 +43,7 @@ export const lotsApi = createApi({
             }),
             invalidatesTags: ['Lots'],
         }),
-        updateLot: builder.mutation<Lot, Partial<Lot> & { id: string }>({
+        updateLot: builder.mutation<ApiResponse<Lot>, Partial<Lot> & { id: string }>({
             query: ({ id, ...patch }) => ({
                 url: `lots/${id}`,
                 method: 'PUT',
@@ -42,7 +51,7 @@ export const lotsApi = createApi({
             }),
             invalidatesTags: ['Lots'],
         }),
-        deleteLot: builder.mutation<{ success: boolean; id: string }, string>({
+        deleteLot: builder.mutation<void, string>({
             query: id => ({
                 url: `lots/${id}`,
                 method: 'DELETE',

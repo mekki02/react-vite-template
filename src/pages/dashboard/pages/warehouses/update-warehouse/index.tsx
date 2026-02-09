@@ -15,7 +15,7 @@ export const WarehouseUpdate: FC = (): JSX.Element => {
     const navigate = useNavigate();
     const notifications = useNotifications();
     const {
-        data: warehouse,
+        data,
         isLoading,
         isError: isFetchError,
         isSuccess: isFetchSuccess,
@@ -23,6 +23,8 @@ export const WarehouseUpdate: FC = (): JSX.Element => {
     } = useGetWarehouseByIdQuery(warehouseId!, {
         skip: !warehouseId,
     });
+
+    const { result: warehouse } = data || {};
 
     const [updateWarehouse, { isLoading: isUpdating, isSuccess: isUpdateSuccess, isError: isUpdateError }] = useUpdateWarehouseMutation();
     

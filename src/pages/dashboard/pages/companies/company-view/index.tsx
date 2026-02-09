@@ -10,9 +10,11 @@ const CompanyView: React.FC = () => {
     const navigate = useNavigate();
     const { companyId } = useParams<{ companyId: string }>();
 
-    const { data: company, isLoading, error } = useGetCompanyByIdQuery(companyId!, {
+    const { data, isLoading, error } = useGetCompanyByIdQuery(companyId!, {
         skip: !companyId,
     });
+
+    const { result: company } = data ?? {};
 
     const handleEditCompany = () => {
         navigate(`/dashboard/companies/${companyId}/edit`);

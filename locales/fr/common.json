@@ -74,12 +74,42 @@
             "title": "Tableau de bord",
             "sidebar": {
                 "dashboard": "Tableau de bord",
+                "organizations": "Organisations",
                 "companies": "Entreprises",
                 "products": "Produits",
                 "users": "Utilisateurs",
                 "warehouses": "Entrepôts",
                 "settings": "Paramètres",
                 "logout": "Déconnexion"
+            },
+            "organizations": {
+                "title": "Organisations",
+                "addOrganization": "Ajouter une organisation",
+                "editOrganization": "Modifier l'organisation",
+                "deleteOrganization": "Supprimer l'organisation",
+                "organizationDetails": "Détails de l'organisation",
+                "columns": {
+                    "id": "ID",
+                    "name": "Nom",
+                    "plan": "Plan",
+                    "isActive": "Actif",
+                    "createdAt": "Créé le",
+                    "updatedAt": "Mis à jour le",
+                    "actions": "Actions"
+                },
+                "form": {
+                    "nameLabel": "Nom de l'organisation",
+                    "planLabel": "Plan",
+                    "isActiveLabel": "Actif",
+                    "createOrganization": "Créer une organisation",
+                    "updateOrganization": "Mettre à jour l'organisation"
+                },
+                "messages": {
+                    "deleteConfirm": "Êtes-vous sûr de vouloir supprimer cette organisation ? Cette action ne peut être annulée.",
+                    "deleteTitle": "Supprimer l'organisation",
+                    "deleteSuccess": "Organisation supprimée avec succès.",
+                    "deleteFailed": "Échec de la suppression de l'organisation. Raison : {error}"
+                }
             },
             "companies": {
                 "title": "Entreprises",

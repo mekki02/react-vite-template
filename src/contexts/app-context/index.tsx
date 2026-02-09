@@ -36,12 +36,12 @@ type AppProviderProps = {
 export const AppProvider = ({ children }: AppProviderProps) => {
   const [activeUser, setActiveUser] = useState<Record<string, any>>({});
   const [token, setToken] = useState<string | null>(
-    localStorage.getItem('token')
+    sessionStorage.getItem('token')
   );
   const [, setRefreshToken] = useState<string | null>(
-    localStorage.getItem('refreshToken')
+    sessionStorage.getItem('refreshToken')
   );
-  
+
   const {
     data: user,
     isLoading,
@@ -57,8 +57,8 @@ export const AppProvider = ({ children }: AppProviderProps) => {
   const login = (newToken: string, newRefreshToken: string) => {
     setToken(newToken);
     setRefreshToken(newRefreshToken);
-    localStorage.setItem('token', newToken);
-    localStorage.setItem('refreshToken', newRefreshToken);
+    sessionStorage.setItem('token', newToken);
+    sessionStorage.setItem('refreshToken', newRefreshToken);
   };
 
   const logout = async () => {
@@ -71,19 +71,12 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     } finally {
       setToken(null);
       setRefreshToken(null);
-      localStorage.removeItem('token');
-      localStorage.removeItem('refreshToken');
+      sessionStorage.removeItem('token');
+      sessionStorage.removeItem('refreshToken');
       setActiveUser({});
       // Navigation will be handled by the component that calls logout
     }
   };
-
-  // Auto logout on token expiry or error
-  useEffect(() => {
-    if (error && token) {
-      logout();
-    }
-  }, [error, token]);
 
   // Update activeUser when user data changes
   useEffect(() => {

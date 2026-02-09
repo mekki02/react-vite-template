@@ -1,16 +1,23 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import type { Product } from '../../../types';
+import type { ApiResponse, CrudParameters, Product } from '../../../types';
 
 export const productsApi = createApi({
     reducerPath: 'productsApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: '/api',
+        baseUrl: 'http://localhost:5001/api',
+        prepareHeaders: (headers) => {
+            const token = sessionStorage.getItem('token')
+            if (token) {
+                headers.set('authorization', `Bearer ${token}`)
+            }
+            return headers
+        },
     }),
     tagTypes: ['Products'],
     endpoints: builder => ({
         getProducts: builder.query<
-            { data: Product[]; totalCount: number },
-            { page: number; pageSize: number; search: string }
+            ApiResponse<Product[]>,
+            CrudParameters
         >({
             query: params => ({
                 url: 'products',
@@ -18,11 +25,11 @@ export const productsApi = createApi({
             }),
             providesTags: ['Products'],
         }),
-        getProductById: builder.query<Product, string>({
+        getProductById: builder.query<ApiResponse<Product>, string>({
             query: id => `products/${id}`,
             providesTags: ['Products'],
         }),
-        createProduct: builder.mutation<Product, Partial<Product>>({
+        createProduct: builder.mutation<ApiResponse<Product>, Partial<Product>>({
             query: newProduct => ({
                 url: 'products',
                 method: 'POST',
@@ -30,7 +37,7 @@ export const productsApi = createApi({
             }),
             invalidatesTags: ['Products'],
         }),
-        updateProduct: builder.mutation<Product, Partial<Product> & { id: string }>({
+        updateProduct: builder.mutation<ApiResponse<Product>, Partial<Product> & { id: string }>({
             query: ({ id, ...patch }) => ({
                 url: `products/${id}`,
                 method: 'PUT',
@@ -38,7 +45,7 @@ export const productsApi = createApi({
             }),
             invalidatesTags: ['Products'],
         }),
-        deleteProduct: builder.mutation<{ success: boolean; id: string }, string>({
+        deleteProduct: builder.mutation<void, string>({
             query: id => ({
                 url: `products/${id}`,
                 method: 'DELETE',

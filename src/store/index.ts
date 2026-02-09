@@ -8,6 +8,7 @@ import { lotsApi } from '../pages/dashboard/redux/slices/lots/lotSlice'
 import { invitationsApi } from '../pages/dashboard/redux/slices/invitations/invitationSlice'
 import { uomApi } from '../pages/dashboard/redux/slices/uom/uomSlice'
 import { authApi } from '../pages/dashboard/redux/slices/auth/authSlice'
+import { organizationsApi } from '../pages/dashboard/redux/slices/organizations/organizationSlice'
 
 export const store = configureStore({
     reducer: {
@@ -21,6 +22,7 @@ export const store = configureStore({
         [invitationsApi.reducerPath]: invitationsApi.reducer,
         [uomApi.reducerPath]: uomApi.reducer,
         [authApi.reducerPath]: authApi.reducer,
+        [organizationsApi.reducerPath]: organizationsApi.reducer,
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware().concat(
@@ -33,6 +35,7 @@ export const store = configureStore({
             invitationsApi.middleware,
             uomApi.middleware,
             authApi.middleware,
+            organizationsApi.middleware,
         ),
 })
 

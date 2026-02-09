@@ -25,16 +25,18 @@ const Login: FC = (): JSX.Element => {
     const onSubmit = async (data: any) => {
         try {
             const loginData: LoginCredentials = {
-                email: data.email,
+                username: data.username,
                 password: data.password
             };
-            const result = await loginMutation(loginData).unwrap();
-            login(result.token, result.refreshToken);
-            notifications.show('Login successful!', {
-                severity: 'success',
-                autoHideDuration: 3000,
-            });
-            navigate('/dashboard');
+            const { result } = await loginMutation(loginData).unwrap();
+            if (result) {
+                login(result.accessToken, result.refreshToken);
+                notifications.show('Login successful!', {
+                    severity: 'success',
+                    autoHideDuration: 3000,
+                });
+                navigate('/dashboard');
+            }
         } catch (error: unknown) {
             const errorMessage = error instanceof Error ? error.message : 'Login failed. Please check your credentials.';
             notifications.show(errorMessage, {
@@ -46,20 +48,20 @@ const Login: FC = (): JSX.Element => {
 
     const loginSchema: Array<IFieldSchema> = [
         {
-            name: 'email',
+            name: 'username',
             component: TextField,
             rules: {
-                required: "Email is required",
+                required: "Username is required",
                 // pattern: {
                 //     value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                 //     message: "Please enter a valid email address",
                 // }
             },
-            label: "Email",
+            label: "Username",
             variant: "outlined",
             control,
-            error: !!errors.email,
-            helperText: errors.email ? String(errors.email.message) : ''
+            error: !!errors.username,
+            helperText: errors.username ? String(errors.username.message) : ''
         },
         {
             name: 'password',

@@ -4,7 +4,7 @@ import type { Resource } from '../../../types';
 export const resourcesApi = createApi({
     reducerPath: 'resourcesApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: '/api',
+        baseUrl: 'http://localhost:5001/api',
     }),
     tagTypes: ['Resources'],
     endpoints: builder => ({

@@ -74,12 +74,42 @@
             "title": "Dashboard",
             "sidebar": {
                 "dashboard": "Dashboard",
+                "organizations": "Organizations",
                 "companies": "Companies",
                 "products": "Products",
                 "users": "Users",
                 "warehouses": "Warehouses",
                 "settings": "Settings",
                 "logout": "Logout"
+            },
+            "organizations": {
+                "title": "Organizations",
+                "addOrganization": "Add Organization",
+                "editOrganization": "Edit Organization",
+                "deleteOrganization": "Delete Organization",
+                "organizationDetails": "Organization Details",
+                "columns": {
+                    "id": "ID",
+                    "name": "Name",
+                    "plan": "Plan",
+                    "isActive": "Active",
+                    "createdAt": "Created At",
+                    "updatedAt": "Updated At",
+                    "actions": "Actions"
+                },
+                "form": {
+                    "nameLabel": "Organization Name",
+                    "planLabel": "Plan",
+                    "isActiveLabel": "Active",
+                    "createOrganization": "Create Organization",
+                    "updateOrganization": "Update Organization"
+                },
+                "messages": {
+                    "deleteConfirm": "Are you sure you want to delete this organization? This action cannot be undone.",
+                    "deleteTitle": "Delete Organization",
+                    "deleteSuccess": "Organization deleted successfully.",
+                    "deleteFailed": "Failed to delete organization. Reason: {error}"
+                }
             },
             "companies": {
                 "title": "Companies",

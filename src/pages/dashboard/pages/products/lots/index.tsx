@@ -22,6 +22,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import AddIcon from '@mui/icons-material/Add';
 import { getErrorMessage } from '@utils/toolkit-query';
 import { useTranslation } from 'react-i18next';
+import { parseJwt } from '@utils/jwt';
 
 const INITIAL_PAGE_SIZE = 10;
 
@@ -47,6 +48,10 @@ const LotsList: React.FC = () => {
     const [sortModel, setSortModel] = useState<GridSortModel>(
         searchParams.get('sort') ? JSON.parse(searchParams.get('sort') ?? '') : [],
     );
+    const token = sessionStorage.getItem('token');
+    const organizationId = parseJwt(token || '')?.organizationID;
+
+    console.log(organizationId)
 
     const { data, isLoading, error } = useGetLotsQuery({
         page: paginationModel.page + 1, // Convert to 1-based index for the API
@@ -54,6 +59,7 @@ const LotsList: React.FC = () => {
         search: filterModel.quickFilterValues
             ? filterModel.quickFilterValues.join(' ')
             : '',
+        organizationId
     });
 
     const [deleteLot] = useDeleteLotMutation();
@@ -162,115 +168,115 @@ const LotsList: React.FC = () => {
 
     const columns = useMemo<GridColDef[]>(
         () => [
-        {
-            field: 'lotNumber',
-            headerName: t('pages.dashboard.lots.columns.lotNumber'),
-            flex: 1,
-            minWidth: 150,
-        },
-        {
-            field: 'productId',
-            headerName: t('pages.dashboard.lots.columns.productId'),
-            flex: 1,
-            minWidth: 200,
-        },
-        {
-            field: 'manufactureDate',
-            headerName: t('pages.dashboard.lots.columns.manufactureDate'),
-            flex: 1,
-            minWidth: 150,
-            valueFormatter: (value) => {
-                if (!value) return '';
-                return new Date(value).toLocaleDateString();
+            {
+                field: 'lotNumber',
+                headerName: t('pages.dashboard.lots.columns.lotNumber'),
+                flex: 1,
+                minWidth: 150,
             },
-        },
-        {
-            field: 'expirationDate',
-            headerName: t('pages.dashboard.lots.columns.expiryDate'),
-            flex: 1,
-            minWidth: 150,
-            valueFormatter: (value) => {
-                if (!value) return '';
-                return new Date(value).toLocaleDateString();
+            {
+                field: 'productId',
+                headerName: t('pages.dashboard.lots.columns.productId'),
+                flex: 1,
+                minWidth: 200,
             },
-        },
-        {
-            field: 'status',
-            headerName: t('common.status.status'),
-            flex: 1,
-            minWidth: 120,
-            renderCell: (params) => (
-                <Chip
-                    label={params.value}
-                    color={getStatusColor(params.value) as any}
-                    size="small"
-                />
-            ),
-        },
-        {
-            field: 'qcState',
-            headerName: t('pages.dashboard.lots.columns.qcState'),
-            flex: 1,
-            minWidth: 120,
-            renderCell: (params) => (
-                <Chip
-                    label={params.value}
-                    color={getQcStateColor(params.value) as any}
-                    size="small"
-                />
-            ),
-        },
-        {
-            field: 'actions',
-            headerName: t('common.actions.actions'),
-            type: 'actions',
-            flex: 1,
-            minWidth: 120,
-            getActions: (params) => [
-                <GridActionsCellItem
-                    key="view"
-                    icon={<VisibilityIcon />}
-                    label={t('common.actions.view')}
-                    onClick={() => navigate(`/dashboard/products/lots/${params.id}`)}
-                />,
-                <GridActionsCellItem
-                    key="edit"
-                    icon={<EditIcon />}
-                    label={t('common.actions.edit')}
-                    onClick={() => navigate(`/dashboard/products/lots/${params.id}/edit`)}
-                />,
-                <GridActionsCellItem
-                    key="delete"
-                    icon={<DeleteIcon />}
-                    label={t('common.actions.delete')}
-                    onClick={() => {
-                        dialogs.confirm(t('common.messages.deleteConfirm', { item: 'lot' }), {
-                            title: t('common.actions.delete') + ' Lot',
-                            severity: 'warning',
-                            okText: t('common.actions.delete'),
-                            cancelText: t('common.actions.cancel'),
-                        }).then((confirmed: boolean) => {
-                            if (confirmed) {
-                                deleteLot(params.id as string)
-                                    .unwrap()
-                                    .then(() => {
-                                        notifications.show(t('common.messages.deleteSuccess', { item: 'Lot' }), {
-                                            severity: 'success',
-                                            autoHideDuration: 3000,
+            {
+                field: 'manufactureDate',
+                headerName: t('pages.dashboard.lots.columns.manufactureDate'),
+                flex: 1,
+                minWidth: 150,
+                valueFormatter: (value) => {
+                    if (!value) return '';
+                    return new Date(value).toLocaleDateString();
+                },
+            },
+            {
+                field: 'expirationDate',
+                headerName: t('pages.dashboard.lots.columns.expiryDate'),
+                flex: 1,
+                minWidth: 150,
+                valueFormatter: (value) => {
+                    if (!value) return '';
+                    return new Date(value).toLocaleDateString();
+                },
+            },
+            {
+                field: 'status',
+                headerName: t('common.status.status'),
+                flex: 1,
+                minWidth: 120,
+                renderCell: (params) => (
+                    <Chip
+                        label={params.value}
+                        color={getStatusColor(params.value) as any}
+                        size="small"
+                    />
+                ),
+            },
+            {
+                field: 'qcState',
+                headerName: t('pages.dashboard.lots.columns.qcState'),
+                flex: 1,
+                minWidth: 120,
+                renderCell: (params) => (
+                    <Chip
+                        label={params.value}
+                        color={getQcStateColor(params.value) as any}
+                        size="small"
+                    />
+                ),
+            },
+            {
+                field: 'actions',
+                headerName: t('common.actions.actions'),
+                type: 'actions',
+                flex: 1,
+                minWidth: 120,
+                getActions: (params) => [
+                    <GridActionsCellItem
+                        key="view"
+                        icon={<VisibilityIcon />}
+                        label={t('common.actions.view')}
+                        onClick={() => navigate(`/dashboard/products/lots/${params.id}`)}
+                    />,
+                    <GridActionsCellItem
+                        key="edit"
+                        icon={<EditIcon />}
+                        label={t('common.actions.edit')}
+                        onClick={() => navigate(`/dashboard/products/lots/${params.id}/edit`)}
+                    />,
+                    <GridActionsCellItem
+                        key="delete"
+                        icon={<DeleteIcon />}
+                        label={t('common.actions.delete')}
+                        onClick={() => {
+                            dialogs.confirm(t('common.messages.deleteConfirm', { item: 'lot' }), {
+                                title: t('common.actions.delete') + ' Lot',
+                                severity: 'warning',
+                                okText: t('common.actions.delete'),
+                                cancelText: t('common.actions.cancel'),
+                            }).then((confirmed: boolean) => {
+                                if (confirmed) {
+                                    deleteLot(params.id as string)
+                                        .unwrap()
+                                        .then(() => {
+                                            notifications.show(t('common.messages.deleteSuccess', { item: 'Lot' }), {
+                                                severity: 'success',
+                                                autoHideDuration: 3000,
+                                            });
+                                        })
+                                        .catch(() => {
+                                            notifications.show(t('common.messages.errorOccurred', { error: 'Failed to delete lot' }), {
+                                                severity: 'error',
+                                                autoHideDuration: 3000,
+                                            });
                                         });
-                                    })
-                                    .catch(() => {
-                                        notifications.show(t('common.messages.errorOccurred', { error: 'Failed to delete lot' }), {
-                                            severity: 'error',
-                                            autoHideDuration: 3000,
-                                        });
-                                    });
-                            }
-                        });
-                    }}
-                />,
-            ],
-        },
+                                }
+                            });
+                        }}
+                    />,
+                ],
+            },
         ],
         [t, navigate, dialogs, deleteLot, notifications],
     );
@@ -289,7 +295,7 @@ const LotsList: React.FC = () => {
 
     const pageTitle = t('pages.dashboard.lots.title');
     const productsTitle = t('pages.dashboard.products.title');
-    
+
     return (
         <PageContainer
             title={pageTitle}
@@ -309,7 +315,7 @@ const LotsList: React.FC = () => {
         >
             <Box sx={{ flex: 1, width: '100%' }}>
                 <DataGrid
-                    rows={data?.data ?? []}
+                    rows={data?.result ?? []}
                     rowCount={data?.totalCount ?? 0}
                     columns={columns}
                     pagination

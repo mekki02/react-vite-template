@@ -28,6 +28,7 @@ import type { Warehouse } from '../../types';
 import { getErrorMessage } from '../../../../utils/toolkit-query';
 import { useDeleteWarehouseMutation, useGetWarehousesQuery } from '../../redux/slices/warehouses/warehousesSlice';
 import { useTranslation } from 'react-i18next';
+import { parseJwt } from '@utils/jwt';
 
 const INITIAL_PAGE_SIZE = 10;
 
@@ -36,6 +37,9 @@ export const WarehousesList: FC = () => {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const { t } = useTranslation();
+    const token = sessionStorage.getItem('token') ?? '';
+    const decodedToken = parseJwt(token);
+    const { organizationID: organizationId } = decodedToken
 
     const dialogs = useDialogs();
     const notifications = useNotifications();
@@ -61,6 +65,7 @@ export const WarehousesList: FC = () => {
         search: filterModel.quickFilterValues
             ? filterModel.quickFilterValues.join(' ')
             : '',
+        organizationId,
     });
     const [deleteWarehouse] = useDeleteWarehouseMutation();
 
@@ -256,7 +261,7 @@ export const WarehousesList: FC = () => {
                     </Box>
                 ) : (
                     <DataGrid
-                        rows={data?.data ?? []}
+                        rows={data?.result ?? []}
                         rowCount={data?.totalCount ?? 0}
                         columns={columns}
                         pagination

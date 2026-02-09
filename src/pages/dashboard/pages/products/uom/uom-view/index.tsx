@@ -18,13 +18,15 @@ export const UOMView: FC = (): JSX.Element => {
     const notifications = useNotifications();
 
     const {
-        data: uom,
+        data,
         isLoading,
         isError,
         error,
     } = useGetUOMByIdQuery(uomId || '', {
         skip: !uomId,
     });
+
+    const { result: uom } = data || {};
 
     useEffect(() => {
         if (isError) {
@@ -97,7 +99,7 @@ export const UOMView: FC = (): JSX.Element => {
                                     Ratio to Base Unit
                                 </Typography>
                                 <Typography variant="body1">
-                                    {uom.ratioToBase.toFixed(3)}
+                                    {uom.ratioToBase}
                                 </Typography>
                             </Box>
                         </Stack>

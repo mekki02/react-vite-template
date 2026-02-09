@@ -15,7 +15,7 @@ export const CompanyUpdate: FC = (): JSX.Element => {
     const navigate = useNavigate();
     const notifications = useNotifications();
     const {
-        data: company,
+        data,
         isLoading,
         isError: isFetchError,
         isSuccess: isFetchSuccess,
@@ -25,7 +25,9 @@ export const CompanyUpdate: FC = (): JSX.Element => {
     });
 
     const [updateCompany, { isLoading: isUpdating, isSuccess: isUpdateSuccess, isError: isUpdateError }] = useUpdateCompanyMutation();
-    
+
+    const { result: company } = data ?? {};
+
     useEffect(() => {
         if (isUpdateSuccess) {
             notifications.show('Company edited successfully.', {

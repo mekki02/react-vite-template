@@ -8,6 +8,7 @@ import { productHandlers } from './handlers/products';
 import { lotHandlers } from './handlers/lots';
 import { invitationHandlers } from './handlers/invitations';
 import { uomHandlers } from './handlers/uom';
+import { organizationHandlers } from './handlers/organizations';
 
 // Setup browser service worker using the given handlers
 export const worker = setupWorker(
@@ -18,7 +19,8 @@ export const worker = setupWorker(
     ...productHandlers,
     ...lotHandlers,
     ...invitationHandlers,
-    ...uomHandlers
+    ...uomHandlers,
+    ...organizationHandlers
 );
 
 export const startMockServiceWorker = () => {

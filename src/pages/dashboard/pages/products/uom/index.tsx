@@ -28,6 +28,7 @@ import type { UOM } from '../../../types';
 import { getErrorMessage } from '@utils/toolkit-query';
 import { useDeleteUOMMutation, useGetUOMsQuery } from '../../../redux/slices/uom/uomSlice';
 import { useTranslation } from 'react-i18next';
+import { parseJwt } from '@utils/jwt';
 
 const INITIAL_PAGE_SIZE = 10;
 
@@ -36,6 +37,9 @@ export const UOMList: FC = () => {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const { t } = useTranslation();
+    const token = sessionStorage.getItem('token') ?? '';
+    const decodedToken = parseJwt(token);
+    const { organizationID: organizationId } = decodedToken
 
     const dialogs = useDialogs();
     const notifications = useNotifications();
@@ -67,6 +71,7 @@ export const UOMList: FC = () => {
         page: paginationModel.page + 1,
         pageSize: paginationModel.pageSize,
         search: '',
+        organizationId,
     });
 
     const [deleteUOM, { isLoading: isDeleting }] = useDeleteUOMMutation();
@@ -244,7 +249,7 @@ export const UOMList: FC = () => {
         return (
             <Box sx={{ height: '100%', width: '100%' }}>
                 <DataGrid
-                    rows={uomData?.data || []}
+                    rows={uomData?.result || []}
                     columns={columns}
                     paginationModel={paginationModel}
                     onPaginationModelChange={handlePaginationModelChange}

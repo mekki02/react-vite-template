@@ -280,7 +280,7 @@ export const InvitationsList: FC = () => {
         return (
             <Box sx={{ height: '100%', width: '100%' }}>
                 <DataGrid
-                    rows={invitationsData?.data || []}
+                    rows={invitationsData?.result || []}
                     columns={columns}
                     paginationModel={paginationModel}
                     onPaginationModelChange={handlePaginationModelChange}

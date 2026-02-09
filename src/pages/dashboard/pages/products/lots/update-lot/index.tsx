@@ -14,9 +14,11 @@ const UpdateLot: React.FC = () => {
     const { lotId } = useParams<{ lotId: string }>();
     const notifications = useNotifications();
 
-    const { data: lot, isLoading: isLoadingLot } = useGetLotByIdQuery(lotId!, {
+    const { data, isLoading: isLoadingLot } = useGetLotByIdQuery(lotId!, {
         skip: !lotId,
     });
+
+    const lot = data?.result;
 
     const [updateLot, { isLoading }] = useUpdateLotMutation();
 
