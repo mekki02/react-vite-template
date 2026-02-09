@@ -121,7 +121,6 @@ const Login: FC = (): JSX.Element => {
                             </Button>
                             <Button
                                 type="button"
-                                fullWidth
                                 variant="text"
                                 color="primary"
                                 sx={{ mt: 1 }}
