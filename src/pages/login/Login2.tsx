@@ -13,7 +13,7 @@ import { useAuthWithNavigation } from "../../hooks/useAuthWithNavigation";
 
 const Login: FC = (): JSX.Element => {
     const navigate = useNavigate();
-    const { isAuthenticated, isLoading, login } = useAuthWithNavigation();
+    const { isAuthenticated, login } = useAuthWithNavigation();
     const [loginMutation] = useLoginMutation();
     const notifications = useNotifications();
     const methods = useForm();
@@ -94,13 +94,9 @@ const Login: FC = (): JSX.Element => {
         }
     ]
 
-    // If session is already valid (OIDC cookie), skip login page
-    if (!isLoading && isAuthenticated) {
-        return <Navigate to="/" replace />
+    if (isAuthenticated) {
+        return <Navigate to="/dashboard" replace />
     }
-
-    // Optionally, you can render null or a small loader while checking auth
-    if (isLoading) return <></>;
 
     return (
         <div className="login-screen">

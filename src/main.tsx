@@ -12,7 +12,7 @@ import { CustomThemeProvider } from "@contexts/theme-context";
 import NotificationsProvider from '@contexts/notification-context/index.tsx'
 
 if (import.meta.env.MODE === 'development') {
-  worker.start();
+  // worker.start();
 }
 
 createRoot(document.getElementById('root')!).render(

@@ -17,7 +17,7 @@ export interface IForm {
 export const generateField = ({ component: Component, rules, defaultValue = '', name, control, error, helperText, ...rest }: IFieldSchema & { error?: boolean; helperText?: string }): JSX.Element => {
 
     return (
-        <FormControl fullWidth margin="dense" key={`form_field_${name}`}>
+        <FormControl fullWidth margin="dense" key={`form_field_${name}`} sx={{ minWidth: 200 }}>
             <Controller
                 name={name}
                 control={control}

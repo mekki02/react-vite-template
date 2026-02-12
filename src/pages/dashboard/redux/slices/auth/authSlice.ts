@@ -14,13 +14,13 @@ import type {
 export const authApi = createApi({
     reducerPath: 'authApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://localhost:5001/api/authenticate',
+        baseUrl: 'http://localhost:5001/api/',
     }),
     tagTypes: ['Auth'],
     endpoints: builder => ({
         login: builder.mutation<AuthResponse, LoginCredentials>({
             query: (credentials) => ({
-                url: '',
+                url: 'authenticate',
                 method: 'POST',
                 body: credentials,
             }),

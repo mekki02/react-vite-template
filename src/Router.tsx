@@ -6,6 +6,10 @@ const Page = lazy(() => import("@pages/page/Page"));
 const Login = lazy(() => import("@pages/login/Login2"));
 const Register = lazy(() => import("@pages/register/Register"));
 const EmailVerification = lazy(() => import("@pages/email-verification/index"));
+const CompleteUserInformation = lazy(() => import("@pages/complete-user-information"));
+
+const ForgotPassword = lazy(() => import("@pages/forgot-password"));
+const ResetPassword = lazy(() => import("@pages/reset-password"));
 
 const Dashboard = lazy(() => import("@pages/dashboard"));
 const Home = lazy(() => import("@pages/dashboard/pages/home/index"));
@@ -42,12 +46,12 @@ const LotView = lazy(() => import("@pages/dashboard/pages/products/lots/lot-view
 const UOMList = lazy(() => import("@pages/dashboard/pages/products/uom/index"));
 const UOMCreate = lazy(() => import("@pages/dashboard/pages/products/uom/create-uom/index"));
 const UOMUpdate = lazy(() => import("@pages/dashboard/pages/products/uom/update-uom/index"));
+const UOMView = lazy(() => import("@pages/dashboard/pages/products/uom/uom-view/index"));
 
 const OrganizationsList = lazy(() => import("@pages/dashboard/pages/organizations/index"));
 const OrganizationCreate = lazy(() => import("@pages/dashboard/pages/organizations/create-organization/index"));
 const OrganizationUpdate = lazy(() => import("@pages/dashboard/pages/organizations/update-organization/index"));
 const OrganizationView = lazy(() => import("@pages/dashboard/pages/organizations/organization-view/index"));
-const UOMView = lazy(() => import("@pages/dashboard/pages/products/uom/uom-view/index"));
  
 
 const LoadingFallback = () => (
@@ -95,6 +99,30 @@ export const router = createBrowserRouter([
         element: (
             <Suspense fallback={<LoadingFallback />}> 
                 <EmailVerification />
+            </Suspense>
+        )
+    },
+    {
+        path: "/complete-sign-up",
+        element: (
+            <Suspense fallback={<LoadingFallback />}>
+                <CompleteUserInformation />
+            </Suspense>
+        )
+    },
+    {
+        path: "/forgot-password",
+        element: (
+            <Suspense fallback={<LoadingFallback />}>
+                <ForgotPassword />
+            </Suspense>
+        )
+    },
+    {
+        path: "/reset-password",
+        element: (
+            <Suspense fallback={<LoadingFallback />}>
+                <ResetPassword />
             </Suspense>
         )
     },

@@ -89,7 +89,7 @@ export const userFormSchema: Array<IFieldSchema> = [
         label: "Gender",
         component: forwardRef(({ options, ...props }: { options: Array<{ label: string; value: string }> }, ref) => (
             <>
-                <InputLabel id="demo-simple-select-label" > Locale </InputLabel>
+                <InputLabel id="demo-simple-select-label" > Gender </InputLabel>
                 <Select label="Role" {...props} ref={ref} >
                     {
                         options.map(option => (
@@ -135,3 +135,6 @@ export const userFormSchema: Array<IFieldSchema> = [
         ]
     },
 ];
+export const completeUserProfileSchema: Array<IFieldSchema> = userFormSchema.filter((field) =>
+    field.name !== 'role' && field.name !== 'email'
+);  

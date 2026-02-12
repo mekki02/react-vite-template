@@ -1,17 +1,14 @@
 import {
   createContext,
   useState,
-  useEffect,
   type ReactNode,
 } from "react";
-import { useGetCurrentUserQuery, useLogoutMutation } from "@pages/dashboard/redux/slices/auth/authSlice";
-import type { User } from "@pages/dashboard/types";
+import { useLogoutMutation } from "@pages/dashboard/redux/slices/auth/authSlice";
+import { parseJwt } from "@utils/jwt";
 
 export type AppContextType = {
   activeUser: Record<string, any>;
   setActiveUser: React.Dispatch<React.SetStateAction<Record<string, any>>>;
-  user: User | null;
-  isLoading: boolean;
   isAuthenticated: boolean;
   login: (token: string, refreshToken: string) => void;
   logout: () => void;
@@ -20,8 +17,6 @@ export type AppContextType = {
 const defaultContextValue: AppContextType = {
   activeUser: {},
   setActiveUser: () => { },
-  user: null,
-  isLoading: false,
   isAuthenticated: false,
   login: () => { },
   logout: () => { },
@@ -42,21 +37,14 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     sessionStorage.getItem('refreshToken')
   );
 
-  const {
-    data: user,
-    isLoading,
-    error,
-  } = useGetCurrentUserQuery(undefined, {
-    skip: !token,
-  });
-
   const [logoutMutation] = useLogoutMutation();
 
-  const isAuthenticated = !!token && !!user && !error;
+  const isAuthenticated = !!token;
 
   const login = (newToken: string, newRefreshToken: string) => {
     setToken(newToken);
     setRefreshToken(newRefreshToken);
+    setActiveUser(parseJwt(newToken));
     sessionStorage.setItem('token', newToken);
     sessionStorage.setItem('refreshToken', newRefreshToken);
   };
@@ -71,25 +59,16 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     } finally {
       setToken(null);
       setRefreshToken(null);
+      setActiveUser({});
       sessionStorage.removeItem('token');
       sessionStorage.removeItem('refreshToken');
-      setActiveUser({});
-      // Navigation will be handled by the component that calls logout
     }
   };
 
-  // Update activeUser when user data changes
-  useEffect(() => {
-    if (user) {
-      setActiveUser(user);
-    }
-  }, [user]);
 
   const value: AppContextType = {
     activeUser,
     setActiveUser,
-    user: user || null,
-    isLoading,
     isAuthenticated,
     login,
     logout,

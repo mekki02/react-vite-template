@@ -1,5 +1,5 @@
 import type { FieldErrors, FieldValues } from "react-hook-form";
-import { userFormSchema } from "./user-schema";
+import { completeUserProfileSchema, userFormSchema } from "./user-schema";
 import { warehouseFormSchema } from "./warehouse-schema";
 import { companyFormSchema } from "./company-schema";
 import { productFormSchema } from "./product-schema";
@@ -9,8 +9,10 @@ import { uomFormSchema } from "./uom-schema";
 import { organizationFormSchema } from "./organization-schema";
 import type { IFieldSchema } from "@utils/forms";
 
+export type SchemaType = 'user' | 'warehouse' | 'company' | 'product' | 'lot' | 'invitation' | 'uom' | 'organization' | 'complete-user-profile';
+
 export const getSchema = (
-    schema: 'user' | 'warehouse' | 'company' | 'product' | 'lot' | 'invitation' | 'uom' | 'organization',
+    schema: SchemaType,
     formControl: any,
     errors?: FieldErrors<FieldValues>,
     customField?: Array<IFieldSchema>
@@ -80,6 +82,13 @@ export const getSchema = (
                 error: errors && Boolean(errors[field.name]),
                 helperText: errors && errors[field.name]?.message
             }));
+        case 'complete-user-profile':
+            return completeUserProfileSchema.map(field => ({
+                ...field,
+                control: formControl,
+                error: errors && Boolean(errors[field.name]),
+                helperText: errors && errors[field.name]?.message
+            }))
 
         // case 'user-profile':
         //     return userProfileFormSchema.map(field => ({
